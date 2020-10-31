@@ -4,9 +4,18 @@ body {
   margin: 0;
 }
 
-body div {
-  max-width: 800px;
-  margin: auto;
+section {
+  padding: 30px 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.singleBubble {
+  min-width: 100px;
+  height: 180px;
+  padding: 20px 30px;
 }
 
 .header {
@@ -27,16 +36,23 @@ body div {
   font-weight: 100;
 }
 
+p, ul {
+  max-width: 800px;
+  margin: auto;
+}
+
+ul {
+  margin: 20px auto;
+}
+
 .emailBanner p {
   background-color: #51698D;
   color: white;
+  font-weight: bold;
   text-align: center;
   width: 100%;
-  padding: 5px 0;
-}
-
-p {
-  margin: 0;
+  max-width: 100%;
+  padding: 10px 0;
 }
 
 .background {
@@ -64,7 +80,7 @@ h1 {
 h3 {
   font-size: 1.5rem;
   color: #27444d;
-  margin: 20px 0;
+  margin: 0 0 20px 0;
 }
 
 .callout {
@@ -79,4 +95,13 @@ h3 {
 .callout h4 {
   font-size: 1.3rem;
   margin: 0;
+}
+
+.blueBG {
+  background-color: rgba(81, 105, 141, 0.2);
+  border-top: 1px solid rgba(81, 105, 141, 0.25);
+  border-bottom: 1px solid rgba(81, 105, 141, 0.25);
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(50, 50, 50, 0.25);
+-moz-box-shadow:    0px 0px 15px 0px rgba(50, 50, 50, 0.25);
+box-shadow:         0px 0px 15px 0px rgba(50, 50, 50, 0.25);
 }
