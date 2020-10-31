@@ -8,6 +8,10 @@ body div {
   margin: auto;
 }
 
+p {
+  margin: 0;
+}
+
 .background {
   display: flex;
   justify-content: space-between;
@@ -32,14 +36,14 @@ h1 {
 h3 {
   font-size: 1.5rem;
   color: #27444d;
-  margin: 0;
+  margin: 20px 0;
 }
 
 .callout {
-  margin: 20px auto 0;
+  margin: 40px auto;
   padding: 10px;
   text-align: center;
-  max-width: 600px;
+  max-width: 800px;
   border-radius: 10px;
   background-color: #82bed1;
 }
