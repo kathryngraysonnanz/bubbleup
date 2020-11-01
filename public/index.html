@@ -1,117 +1,66 @@
-<!doctype html>
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
     <meta charset="utf-8">
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
 
-    <title>BubbleUp</title>
-    <meta name="description" content="BubbleUp">
-    <meta name="author" content="Kathryn Grayson Nanz">
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/8.0.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/8.0.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/8.0.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/8.0.0/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/8.0.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/8.0.0/firebase-analytics.js"></script>
+    <script defer src="/__/firebase/8.0.0/firebase-remote-config.js"></script>
+    <script defer src="/__/firebase/8.0.0/firebase-performance.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
-
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
   </head>
-
   <body>
-    <section class="header">
-      <h1>BubbleUp</h1>
-      <h3  >The app to help you navigate safe social gathering during
-        the pandemic.</h3>
-    </section>
-    <a class="emailBanner" href="#signup">
-      <p>
-      We're still in development – <u>sign up or fill out our feature survey</u> and you'll be the first to know
-        when we launch!
-      </p>
-    </a>
-    <section>
-      <div class="flex"/>
-        <img src="./assets/girl1.png" class="singleBubble"/>
-        <span>
-        <h3  >Are you part of a Covid-19 social bubble?</h3>
-        <p>One of the most commonly recommended ways to socialize while minimizing risk
-          during the pandemic is by creating a "bubble".
-          Eventually, however, people in the bubble <i>will</i>
-          leave the bubble. <b>Work, doctor's appointments, childcare arrangements,
-          family trips, and other exceptions are inevitable,</b> but keeping your
-          bubble up to date with everyone's activities is hard when communication
-          is spread across phone calls, group chats, personal texts, long chain emails, and more.
-          <br/><br/>
-          <b>If only there was a hub where you could
-          gather and manage all the information your bubble needs to operate safely...</b>
-        </p>
-      </span>
-      </div>
-    </section>
-     <section class="blueBG flex">
-       <span>
-      <h3  >Meet BubbleUp: simple, social, safe.</h3>
-      <p>Create a bubble, add your friends, establish your bubble's guidelines
-        and use our quick check-in to share recent activity information. Next time
-        you want to meet up, BubbleUp to see:</p>
-      <ul>
-        <li>the last time your friends socialized outside the bubble</li>
-        <li>if they were indoors, wearing a mask, and socially distant</li>
-        <li>if they used public transport</li>
-        <li>their recent COVID-19 test dates and results</li>
-        <li>and more, based on your bubble's shared guidelines and what your friends report!</li>
-      </ul>
-      <p>Rather than pretending these exceptions will never happen,
-      <b>BubbleUp helps you include these variables as a realistic
-      part of your planning.</b> Because we all deserve to feel empowered when
-      making decisions about our own safety.</p>
-    </span>
+    <div id="root"></div>
 
-    <img src="./assets/boy1.png" class="singleBubble"/>
-    </section>
-    <section class="flex privacy">
-      <img src="./assets/group.png" class="group"/>
-      <span>
-        <h3  >Your activity is <i>only</i> visible to the people in your bubble.</h3>
-        <p> We will <b>never</b> track or ask your location, <b>never</b> gather any data using background
-        services, and <b>never</b> sell any data.
-        All activity information is self-reported
-        by you, and <b>never</b> shared
-        outside your bubble. Every check-in question is optional, and the only "personal"
-        information we require is an email address & username. Share confidently within
-        your bubble.</p>
-      </span>
-    </section>
-    <section class="callout" id="signup">
-      <h3>We're still in development – sign up, and you'll be the first to know when we launch!</h3>
-      <div id="mc_embed_signup" >
-        <form action="https://gmail.us2.list-manage.com/subscribe/post?u=512d37f666a7b79860da0ffea&amp;id=b91ff307b9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-            <div class="emailFlex" id="mc_embed_signup_scroll">
-        	     <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_512d37f666a7b79860da0ffea_b91ff307b9" tabindex="-1" value=""></div>
-            <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-            </div>
-        </form>
-      </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-      <p>We'd love to hear from you! <a href="https://docs.google.com/forms/d/e/1FAIpQLSeieENqBZ2mwm6-vZkbPQBloCnKmnd-WRstChePBxNX_o9LEg/viewform?usp=sf_link">Take our quick survey</a> to help us
-        decide which features to prioritize. Thank you, and stay safe!</p>
-    </section>
-
-    <!-- Copy and paste these scripts into the bottom of your <body> tag, but before you use any Firebase services:-->
-
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="/__/firebase/8.0.0/firebase-app.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="/__/firebase/8.0.0/firebase-analytics.js"></script>
-
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
-
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth',
+            'database',
+            'messaging',
+            'storage',
+            'analytics',
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
   </body>
 </html>
