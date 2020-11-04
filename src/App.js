@@ -1,8 +1,9 @@
 import './App.css';
 import firebase from 'firebase/app'
 import React from 'react';
+import Accordion from './components/accordion'
 
-export default class TodoApp extends React.Component {
+export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
@@ -11,33 +12,176 @@ export default class TodoApp extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount(){
-    const rootRef = firebase.database().ref();
-    const speedRef = rootRef.child('speed');
-    speedRef.on('value', snap => {
-      this.setState({ speed: snap.val() });
-    });
-  }
-
   render() {
+
+    let userData = {
+      name: "Kathryn",
+      lastCheckIn: "2020-10-31"
+    }
+
+    let bubbleData = {
+      name: "The Squad",
+      members: [
+        {
+          name: 'Adam',
+          isQuarantining: [false, null],
+          status: "Having a great time!",
+          checkIn: [
+            {
+              question: "socialized",
+              answer: true,
+              details: {
+                masked: true,
+                distanced: false,
+                outdoors: true,
+              },
+              date: '2020-10-31'
+            },
+            {
+              question: "travel",
+              answer: false,
+              date: '2020-11-01'
+            },
+            {
+              question: "public transport",
+              answer: false,
+              date: '2020-11-01'
+            },
+            {
+              question: "inside",
+              answer: true,
+              date: '2020-11-01'
+            },
+            {
+              question: "tested",
+              answer: true,
+              details: {
+                results: "negative"
+              },
+              date: '2020-11-01'
+            },
+            {
+              question: "contact with positive",
+              answer: true,
+              date: '2020-10-20'
+            },
+            {
+              question: "symptoms",
+              answer: false,
+              date: '2020-11-01'
+            }
+          ]
+        },
+        {
+          name: 'K',
+          isQuarantining: [true, '2020-11-28'],
+          status: '',
+          checkIn: [
+            {
+              question: "socialized",
+              answer: true,
+              details: {
+                masked: true,
+                distanced: false,
+                outdoors: true,
+              },
+              date: '2020-10-31'
+            },
+            {
+              question: "travel",
+              answer: false,
+              date: '2020-11-01'
+            },
+            {
+              question: "public transport",
+              answer: false,
+              date: '2020-11-01'
+            },
+            {
+              question: "inside",
+              answer: true,
+              date: '2020-11-01'
+            },
+            {
+              question: "tested",
+              answer: true,
+              details: {
+                results: "negative"
+              },
+              date: '2020-11-01'
+            },
+            {
+              question: "contact with positive",
+              answer: true,
+              date: '2020-10-20'
+            },
+            {
+              question: "symptoms",
+              answer: false,
+              date: '2020-11-01'
+            }
+          ]
+        }
+      ]
+    }
+
+    function mapOverMembers(members){
+      return (
+        <>
+          {members && members.map(member => (
+            <Accordion
+              title={member.name}
+              content={
+                <>
+                  { member.status &&
+                    <>
+                    <p>Status:</p>
+                    <div>{member.status}</div>
+                    </>
+                  }
+                  {member.checkIn && mapOverCheckIn(member.checkIn)}
+                </>
+              }
+            />
+          ))}
+        </>
+      )
+    }
+
+    function mapOverCheckIn(checkIn){
+      return (
+        <>
+        {console.log("sup", checkIn)}
+        {checkIn && checkIn.map(question => (
+          <>
+            { question.answer &&
+              <p>{question.question}: {question.date}</p>
+            }
+          </>
+        ))}
+        </>
+      )
+    }
+
     return (
-      <div>
-        <h3>TODO</h3>
-        <p>{this.state.speed}</p>
-        <TodoList items={this.state.items} />
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="new-todo">
-            What needs to be done?
-          </label>
-          <input
-            id="new-todo"
-            onChange={this.handleChange}
-            value={this.state.text}
-          />
-          <button>
-            Add #{this.state.items.length + 1}
-          </button>
-        </form>
+      <div className="background">
+        <div className="contentWrapper">
+          <h1>Welcome back, [name]</h1>
+          <div className="checkIn">
+            <p>Your last check-in was [date]</p>
+            <button>Check-in</button>
+          </div>
+          <div className="bubble">
+            <div className="bubbleName">
+              <h2>{bubbleData.name}</h2>
+              <p>settings</p>
+            </div>
+            <p>{bubbleData.members.length} members • Bubble rules</p>
+            <div className="members">
+              {mapOverMembers(bubbleData.members)}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -59,17 +203,5 @@ export default class TodoApp extends React.Component {
       items: state.items.concat(newItem),
       text: ''
     }));
-  }
-}
-
-class TodoList extends React.Component {
-  render() {
-    return (
-      <ul>
-        {this.props.items.map(item => (
-          <li key={item.id}>{item.text}</li>
-        ))}
-      </ul>
-    );
   }
 }
