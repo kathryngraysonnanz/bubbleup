@@ -2,6 +2,7 @@ import './App.css';
 import firebase from 'firebase/app'
 import React from 'react';
 import Accordion from './components/accordion'
+import Button from './components/button'
 
 export default class Home extends React.Component {
 
@@ -16,11 +17,15 @@ export default class Home extends React.Component {
 
     let userData = {
       name: "Kathryn",
-      lastCheckIn: "2020-10-31"
+      lastCheckIn: "2020-10-31",
+      bubble: 'uuid',
+      admin: true
     }
 
     let bubbleData = {
+      uuid: 'uuid',
       name: "The Squad",
+      rules: 'yep we have rules',
       members: [
         {
           name: 'Adam',
@@ -166,17 +171,22 @@ export default class Home extends React.Component {
     return (
       <div className="background">
         <div className="contentWrapper">
-          <h1>Welcome back, [name]</h1>
+          <h1>Welcome back, <b>{userData.name}</b></h1>
           <div className="checkIn">
-            <p>Your last check-in was [date]</p>
-            <button>Check-in</button>
+            <p>Your last check-in was {userData.lastCheckIn}</p>
+            <Button>Check-in</Button>
           </div>
           <div className="bubble">
-            <div className="bubbleName">
-              <h2>{bubbleData.name}</h2>
-              <p>settings</p>
+            <div className="bubbleInfo">
+              <div className="bubbleName">
+                <h2>{bubbleData.name}</h2>
+                { userData.admin && <p>settings</p> }
+              </div>
+              <div className="bubbleDetails">
+                <p>{bubbleData.members.length} members</p>
+                { bubbleData.rules && <p> • Bubble rules</p> }
+              </div>
             </div>
-            <p>{bubbleData.members.length} members • Bubble rules</p>
             <div className="members">
               {mapOverMembers(bubbleData.members)}
             </div>

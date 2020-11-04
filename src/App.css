@@ -1,5 +1,31 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+}
+
+h1 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 3rem;
+  margin: 0;
+  color: white;
+  font-weight: 100;
+}
+
+h2 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 2rem;
+  margin: 0;
+}
+
+h2, p {
+  margin: 0;
+}
+
 .background {
-  background-color: white;
+  background-color: #253040;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%23465b78' stroke-width='100' stroke-opacity='0' %3E%3Ccircle fill='%23253040' cx='0' cy='0' r='1800'/%3E%3Ccircle fill='%23283445' cx='0' cy='0' r='1700'/%3E%3Ccircle fill='%232c384b' cx='0' cy='0' r='1600'/%3E%3Ccircle fill='%232f3d50' cx='0' cy='0' r='1500'/%3E%3Ccircle fill='%23324156' cx='0' cy='0' r='1400'/%3E%3Ccircle fill='%2336465b' cx='0' cy='0' r='1300'/%3E%3Ccircle fill='%23394a61' cx='0' cy='0' r='1200'/%3E%3Ccircle fill='%233d4f67' cx='0' cy='0' r='1100'/%3E%3Ccircle fill='%2340536d' cx='0' cy='0' r='1000'/%3E%3Ccircle fill='%23435872' cx='0' cy='0' r='900'/%3E%3Ccircle fill='%23475c78' cx='0' cy='0' r='800'/%3E%3Ccircle fill='%234b617e' cx='0' cy='0' r='700'/%3E%3Ccircle fill='%234e6684' cx='0' cy='0' r='600'/%3E%3Ccircle fill='%23526b8a' cx='0' cy='0' r='500'/%3E%3Ccircle fill='%23556f90' cx='0' cy='0' r='400'/%3E%3Ccircle fill='%23597497' cx='0' cy='0' r='300'/%3E%3Ccircle fill='%235c799d' cx='0' cy='0' r='200'/%3E%3Ccircle fill='%23607ea3' cx='0' cy='0' r='100'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
   width: 100%;
   height: 100vh;
 }
@@ -7,14 +33,47 @@
 .contentWrapper {
   max-width: 800px;
   margin: 0 auto;
+  flex-flow: column;
+  display: flex;
+  height: 100%;
 }
 
-h1 {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 3rem;
+.bubbleInfo {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 99;
+  border-bottom: 1px solid grey;
+  padding: 5px 0;
 }
 
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 1rem;
+.bubbleName {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bubbleDetails {
+  display: flex;
+}
+
+.checkIn {
+  display: flex;
+  align-items: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.checkIn p {
+  margin-right: 10px;
+}
+
+.bubble {
+  background-color: white;
+  border-radius: 10px 10px 0 0;
+  flex: 1 1 auto;
+  padding: 0 20px;
+  overflow: scroll;
+  -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.1);
 }
