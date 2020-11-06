@@ -3,6 +3,8 @@ import firebase from 'firebase/app'
 import React from 'react';
 import Accordion from './components/accordion'
 import Button from './components/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCog, faUserCircle, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 
 export default class Home extends React.Component {
 
@@ -28,9 +30,10 @@ export default class Home extends React.Component {
       rules: 'yep we have rules',
       members: [
         {
-          name: 'Adam',
+          name: 'Adam Zweisteisteinger Euralious',
           isQuarantining: [false, null],
           status: "Having a great time!",
+          lastCheckIn: '2020-11-02',
           checkIn: [
             {
               question: "socialized",
@@ -81,6 +84,7 @@ export default class Home extends React.Component {
           name: 'K',
           isQuarantining: [true, '2020-11-28'],
           status: '',
+          lastCheckIn: '2020-11-01',
           checkIn: [
             {
               question: "socialized",
@@ -136,13 +140,15 @@ export default class Home extends React.Component {
           {members && members.map(member => (
             <Accordion
               title={member.name}
+              isQuarantining={member.isQuarantining[0]}
+              lastCheckIn={member.lastCheckIn}
               content={
                 <>
                   { member.status &&
-                    <>
-                    <p>Status:</p>
-                    <div>{member.status}</div>
-                    </>
+                    <div className="status">
+                      <p>Status:</p>
+                      <div>{member.status}</div>
+                    </div>
                   }
                   {member.checkIn && mapOverCheckIn(member.checkIn)}
                 </>
@@ -153,37 +159,54 @@ export default class Home extends React.Component {
       )
     }
 
+    function daysSince(date){
+      let currentDate = new Date();
+      let questionDate = new Date(date);
+
+      let timeDifference = currentDate.getTime() - questionDate.getTime();
+      let dayDifference = timeDifference / (1000 * 3600 * 24);
+
+      return Math.round(dayDifference)
+    }
+
     function mapOverCheckIn(checkIn){
       return (
-        <>
-        {console.log("sup", checkIn)}
+        <div className="questionWrapper">
         {checkIn && checkIn.map(question => (
           <>
             { question.answer &&
-              <p>{question.question}: {question.date}</p>
+              <div className="question">
+                <div className="days">
+                  <p>
+                    {daysSince(question.date)}
+                  </p>
+                  <p>days</p>
+                </div>
+                <p>{question.question}</p>
+              </div>
             }
           </>
         ))}
-        </>
+        </div>
       )
     }
 
     return (
       <div className="background">
         <div className="contentWrapper">
-          <h1>Welcome back, <b>{userData.name}</b></h1>
+          <h1>Welcome back, <b>{userData.name}</b> <FontAwesomeIcon icon={faUserCircle} /></h1>
           <div className="checkIn">
             <p>Your last check-in was {userData.lastCheckIn}</p>
-            <Button>Check-in</Button>
+            <Button><FontAwesomeIcon icon={faCalendarCheck} /> Check-in</Button>
           </div>
           <div className="bubble">
             <div className="bubbleInfo">
               <div className="bubbleName">
                 <h2>{bubbleData.name}</h2>
-                { userData.admin && <p>settings</p> }
+                <h2>{ userData.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
               </div>
               <div className="bubbleDetails">
-                <p>{bubbleData.members.length} members</p>
+                <p>{bubbleData.members.length} members </p>
                 { bubbleData.rules && <p> • Bubble rules</p> }
               </div>
             </div>
