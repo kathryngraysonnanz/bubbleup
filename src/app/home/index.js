@@ -24,7 +24,6 @@ export default class Home extends React.Component {
       writeError: null
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this)
   }
 
@@ -47,20 +46,6 @@ export default class Home extends React.Component {
     this.setState({
       bubbles: event.target.value
     });
-  }
-
-  async handleSubmit(event) {
-    event.preventDefault();
-    this.setState({ writeError: null });
-    try {
-      await db.ref("bubbles").push({
-        bubbles: this.state.names,
-        timestamp: Date.now()
-      });
-      this.setState({ bubbles: '' });
-    } catch (error) {
-      this.setState({ writeError: error.message });
-    }
   }
 
   toggleCheckinVisibility() {
@@ -269,12 +254,6 @@ export default class Home extends React.Component {
             <div className="members">
               {mapOverMembers(bubbleData.members)}
             </div>
-
-            <form onSubmit={this.handleSubmit}>
-              <input onChange={this.handleChange} value={this.state.names}></input>
-              {this.state.error ? <p>{this.state.writeError}</p> : null}
-              <button type="submit">Send</button>
-            </form>
           </div>
         </div>
       </div>

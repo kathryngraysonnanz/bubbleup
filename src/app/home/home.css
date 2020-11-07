@@ -18,6 +18,13 @@ h2 {
   color: #3D405B;
 }
 
+h3 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.3rem;
+  margin: 0;
+  color: #FFF;
+}
+
 h2, p {
   margin: 0;
   color: #3D405B;
