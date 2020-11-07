@@ -1,18 +1,39 @@
-import './App.css';
+import React, { Component } from "react";
+
 import firebase from 'firebase/app'
-import React from 'react';
+import { auth } from "./services/firebase";
+import { db } from "./services/firebase"
+
 import Accordion from './components/accordion'
 import Button from './components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog, faUserCircle, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import './App.css';
 
 export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { items: [], text: '', speed: 10 };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      bubbles: [],
+      readError: null,
+      writeError: null
+    };
+  }
+
+  async componentDidMount() {
+    this.setState({ readError: null });
+    try {
+      db.ref("bubbles").on("value", snapshot => {
+        let bubbles = [];
+        snapshot.forEach((snap) => {
+          bubbles.push(snap.val());
+        });
+        this.setState({ bubbles });
+      });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
   }
 
   render() {
@@ -213,28 +234,16 @@ export default class Home extends React.Component {
             <div className="members">
               {mapOverMembers(bubbleData.members)}
             </div>
+
+            <form onSubmit={this.handleSubmit}>
+              <input onChange={this.handleChange} value={this.state.names}></input>
+              {this.state.error ? <p>{this.state.writeError}</p> : null}
+              <button type="submit">Send</button>
+            </form>
           </div>
         </div>
       </div>
     );
   }
 
-  handleChange(e) {
-    this.setState({ text: e.target.value });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    if (this.state.text.length === 0) {
-      return;
-    }
-    const newItem = {
-      text: this.state.text,
-      id: Date.now()
-    };
-    this.setState(state => ({
-      items: state.items.concat(newItem),
-      text: ''
-    }));
-  }
 }
