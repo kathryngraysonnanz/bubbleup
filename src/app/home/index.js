@@ -6,6 +6,7 @@ import { db } from "../services/firebase"
 
 import Checkin from '../checkin'
 import BubbleSettings from '../bubble-settings'
+import UserSettings from '../user-settings'
 
 import Accordion from '../components/accordion'
 import Button from '../components/button'
@@ -20,6 +21,7 @@ export default class Home extends React.Component {
     this.state = {
       checkinVisible: false,
       bubbleSettingsVisible: false,
+      userSettingsVisible: false,
       user: auth().currentUser,
       bubbles: [],
       readError: null,
@@ -28,6 +30,7 @@ export default class Home extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
+    this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
 
   async componentDidMount() {
@@ -57,6 +60,10 @@ export default class Home extends React.Component {
 
   toggleBubbleSettingsVisibility() {
     this.setState({ bubbleSettingsVisible: !this.state.bubbleSettingsVisible });
+  }
+
+  toggleUserSettingsVisibility() {
+    this.setState({ userSettingsVisible: !this.state.userSettingsVisible });
   }
 
 
@@ -239,10 +246,14 @@ export default class Home extends React.Component {
     return (
       <div className="background">
         { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
+        { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
         { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
         <div className="contentWrapper">
           <div className="welcome">
-            <h1>Welcome back, <b>{userData.name}</b>&nbsp;<FontAwesomeIcon icon={faUserCircle} /></h1>
+            <h1>Welcome back, <b>{userData.name}</b>&nbsp;
+            <button onClick={(e)=>this.toggleUserSettingsVisibility()}>
+              <FontAwesomeIcon icon={faUserCircle} />
+            </button></h1>
             <div>
               <p>Your last check-in was {userData.lastCheckIn}</p>
               <Button onClick={(e)=>this.toggleCheckinVisibility()}>

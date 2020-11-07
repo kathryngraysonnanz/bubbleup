@@ -63,9 +63,11 @@ h2, p {
   align-items: center;
 }
 
-.bubbleName button {
+.bubbleName button, .welcome h1 button {
   border: none;
   background-color: transparent;
+  font-size: inherit;
+  color: inherit;
 }
 
 .bubbleDetails {

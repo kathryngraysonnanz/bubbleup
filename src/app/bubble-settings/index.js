@@ -13,11 +13,13 @@ export default class BubbleSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.updateEndDate = this.updateEndDate.bind(this);
+    this.updateName = this.updateName.bind(this);
     this.state = {
       user: auth().currentUser,
       readError: null,
       writeError: null,
+
+      bubbleName: '',
     };
   }
 
@@ -35,8 +37,8 @@ export default class BubbleSettings extends React.Component {
     }
   }
 
-  updateEndDate(event) {
-    this.setState({ quarantineEnd: event.target.value });
+  updateName(event) {
+    this.setState({ bubbleName: event.target.value });
   }
 
   render() {
@@ -87,7 +89,8 @@ export default class BubbleSettings extends React.Component {
             <p>Bubble names are optional and just for fun. We’ll use the name
             “My Bubble” if nothing is provided. </p>
 
-            <input type="text"/>
+            <input onChange={this.updateName} type="text" maxLength="60"
+            id="bubbleName" name="bubbleName"/>
 
             <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
           </form>
