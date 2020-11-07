@@ -1,24 +1,31 @@
 import React, { Component } from "react";
 
 import firebase from 'firebase/app'
-import { auth } from "./services/firebase";
-import { db } from "./services/firebase"
+import { auth } from "../services/firebase";
+import { db } from "../services/firebase"
 
-import Accordion from './components/accordion'
-import Button from './components/button'
+import Checkin from '../checkin'
+
+import Accordion from '../components/accordion'
+import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog, faUserCircle, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
-import './App.css';
+import './home.css';
 
 export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      checkinVisible: false,
+      user: auth().currentUser,
       bubbles: [],
       readError: null,
       writeError: null
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this)
   }
 
   async componentDidMount() {
@@ -35,6 +42,31 @@ export default class Home extends React.Component {
       this.setState({ readError: error.message });
     }
   }
+
+  handleChange(event) {
+    this.setState({
+      bubbles: event.target.value
+    });
+  }
+
+  async handleSubmit(event) {
+    event.preventDefault();
+    this.setState({ writeError: null });
+    try {
+      await db.ref("bubbles").push({
+        bubbles: this.state.names,
+        timestamp: Date.now()
+      });
+      this.setState({ bubbles: '' });
+    } catch (error) {
+      this.setState({ writeError: error.message });
+    }
+  }
+
+  toggleCheckinVisibility() {
+    this.setState({ checkinVisible: !this.state.checkinVisible });
+  }
+
 
   render() {
 
@@ -214,11 +246,14 @@ export default class Home extends React.Component {
 
     return (
       <div className="background">
+        { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
         <div className="contentWrapper">
           <h1>Welcome back, <b>{userData.name}</b> <FontAwesomeIcon icon={faUserCircle} /></h1>
           <div className="checkIn">
             <p>Your last check-in was {userData.lastCheckIn}</p>
-            <Button><FontAwesomeIcon icon={faCalendarCheck} /> Check-in</Button>
+            <Button onClick={(e)=>this.toggleCheckinVisibility()}>
+              <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
+            </Button>
           </div>
           <div className="bubble">
             <div className="bubbleInfo">
