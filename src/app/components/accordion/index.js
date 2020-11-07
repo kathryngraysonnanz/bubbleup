@@ -27,7 +27,7 @@ function Accordion(props) {
       <button className={`accordion ${setActive}`} onClick={toggleAccordion}>
         <div className="name">
           <Chevron className={`${setRotate}`} width={8} fill={"#777"} />
-          <p className="title">{props.title}</p>
+          <p className="accordionTitle">{props.title}</p>
           { props.isQuarantining == true &&
             <div className="quarantineAlert">
               <p>Quarantined</p>

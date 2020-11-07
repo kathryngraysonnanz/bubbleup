@@ -258,10 +258,6 @@ export default class Home extends React.Component {
                   <h2>{ userData.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
                 </button>
               </div>
-              <div className="bubbleDetails">
-                <p>{bubbleData.members.length} members </p>
-                { bubbleData.rules && <p> • Bubble rules</p> }
-              </div>
             </div>
             <div className="members">
               {mapOverMembers(bubbleData.members)}
