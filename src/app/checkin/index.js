@@ -246,7 +246,7 @@ export default class Checkin extends React.Component {
             <hr/>
 
             <h3>Do you have a status update or message to add to your check-in?</h3>
-            <textarea onChange={this.updateStatus} maxlength="300" id="status" name="status"></textarea>
+            <textarea onChange={this.updateStatus} maxLength="300" id="status" name="status"></textarea>
 
             <Button type="submit">Share with my bubble</Button>
           </form>

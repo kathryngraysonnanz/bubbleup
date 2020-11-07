@@ -70,15 +70,20 @@ h2, p {
   margin: 0 3px;
 }
 
-.checkIn {
+.welcome {
+  padding: 10px 15px 0;
+}
+
+.welcome div {
   display: flex;
   align-items: center;
   color: white;
   margin-bottom: 30px;
 }
 
-.checkIn p {
+.welcome div p {
   margin-right: 10px;
+  color: white;
 }
 
 .bubble {
@@ -143,4 +148,15 @@ h2, p {
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
+}
+
+@media (max-width: 500px){
+  .welcome div {
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .welcome div p {
+    margin-bottom: 10px;
+  }
 }

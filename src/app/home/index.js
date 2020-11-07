@@ -233,12 +233,14 @@ export default class Home extends React.Component {
       <div className="background">
         { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
         <div className="contentWrapper">
-          <h1>Welcome back, <b>{userData.name}</b> <FontAwesomeIcon icon={faUserCircle} /></h1>
-          <div className="checkIn">
-            <p>Your last check-in was {userData.lastCheckIn}</p>
-            <Button onClick={(e)=>this.toggleCheckinVisibility()}>
-              <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
-            </Button>
+          <div className="welcome">
+            <h1>Welcome back, <b>{userData.name}</b>&nbsp;<FontAwesomeIcon icon={faUserCircle} /></h1>
+            <div>
+              <p>Your last check-in was {userData.lastCheckIn}</p>
+              <Button onClick={(e)=>this.toggleCheckinVisibility()}>
+                <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
+              </Button>
+            </div>
           </div>
           <div className="bubble">
             <div className="bubbleInfo">
