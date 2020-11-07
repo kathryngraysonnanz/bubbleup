@@ -8,6 +8,8 @@ import Checkin from '../checkin'
 import BubbleSettings from '../bubble-settings'
 import UserSettings from '../user-settings'
 
+import { signup, signin, signout } from '../helpers/auth';
+
 import Accordion from '../components/accordion'
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -19,38 +21,77 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      authenticated: false,
+      loading: true,
+      error: null,
+      email: '',
+      password: '',
+      login: true,
+
       checkinVisible: false,
       bubbleSettingsVisible: false,
       userSettingsVisible: false,
+
       user: auth().currentUser,
       bubbles: [],
       readError: null,
       writeError: null
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
+
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
     this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
 
   async componentDidMount() {
-    this.setState({ readError: null });
-    try {
-      db.ref("bubbles").on("value", snapshot => {
-        let bubbles = [];
-        snapshot.forEach((snap) => {
-          bubbles.push(snap.val());
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          authenticated: true,
+          loading: false,
         });
-        this.setState({ bubbles });
-      });
-    } catch (error) {
-      this.setState({ readError: error.message });
-    }
+      } else {
+        this.setState({
+          authenticated: false,
+          loading: false,
+        });
+      }
+    })
   }
 
   handleChange(event) {
     this.setState({
-      bubbles: event.target.value
+      [event.target.name]: event.target.value
+    });
+  }
+
+  async handleSignUp(event) {
+    event.preventDefault();
+    this.setState({ error: '' });
+    try {
+      await signup(this.state.email, this.state.password);
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  async handleSignIn(event) {
+    event.preventDefault();
+    this.setState({ error: "" });
+    try {
+      await signin(this.state.email, this.state.password);
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  signOutUser() {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }).catch(function(error) {
+      // An error happened.
     });
   }
 
@@ -244,38 +285,104 @@ export default class Home extends React.Component {
     }
 
     return (
-      <div className="background">
-        { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
-        { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
-        { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
-        <div className="contentWrapper">
-          <div className="welcome">
-            <h1>Welcome back, <b>{userData.name}</b>&nbsp;
-            <button onClick={(e)=>this.toggleUserSettingsVisibility()}>
-              <FontAwesomeIcon icon={faUserCircle} />
-            </button></h1>
-            <div>
-              <p>Your last check-in was {userData.lastCheckIn}</p>
-              <Button onClick={(e)=>this.toggleCheckinVisibility()}>
-                <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
-              </Button>
-            </div>
+      <>
+        { !this.state.authenticated &&
+          <div className="authPage">
+            <h1>Welcome to <b>BubbleUp!</b></h1>
+            { !this.state.login &&
+              <>
+                <h3>
+                  Create an account
+                </h3>
+                <form onSubmit={this.handleSignUp}>
+                  <div>
+                    <input placeholder="Email" name="email" type="email" onChange={this.handleChange} value={this.state.email}></input>
+                  </div>
+                  <div>
+                    <input placeholder="Password" name="password" onChange={this.handleChange} value={this.state.password} type="password"></input>
+                  </div>
+                  <div>
+                    {this.state.error ? <p>{this.state.error}</p> : null}
+                    <button type="submit">Sign up</button>
+                  </div>
+                  <hr></hr>
+                </form>
+              </>
+            }
+            { this.state.login &&
+              <>
+              <h3>
+                Login to your account
+              </h3>
+              <p>No account? Create one!</p>
+              <form onSubmit={this.handleSignIn}>
+                <div>
+                  <input
+                    placeholder="Email"
+                    name="email"
+                    type="email"
+                    onChange={this.handleChange}
+                    value={this.state.email}
+                  />
+                </div>
+                <div>
+                  <input
+                    placeholder="Password"
+                    name="password"
+                    onChange={this.handleChange}
+                    value={this.state.password}
+                    type="password"
+                  />
+                </div>
+                <div>
+                  {this.state.error ? (
+                    <p>{this.state.error}</p>
+                  ) : null}
+                  <Button type="submit">Login</Button>
+                </div>
+                <hr />
+              </form>
+            </>
+            }
           </div>
-          <div className="bubble">
-            <div className="bubbleInfo">
-              <div className="bubbleName">
-                <h2>{bubbleData.name}</h2>
-                <button onClick={(e)=>this.toggleBubbleSettingsVisibility()}>
-                  <h2>{ userData.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
-                </button>
+        }
+        { this.state.authenticated &&
+        <div className="background">
+          { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
+          { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
+          { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
+          <div className="contentWrapper">
+            <div className="welcome">
+              <h1>Welcome back, <b>{userData.name}</b>&nbsp;
+              <button onClick={(e)=>this.toggleUserSettingsVisibility()}>
+                <FontAwesomeIcon icon={faUserCircle} />
+              </button></h1>
+              <div>
+                <p>Your last check-in was {userData.lastCheckIn} •
+                 <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
+                </p>
+                <Button onClick={(e)=>this.toggleCheckinVisibility()}>
+                  <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
+                </Button>
               </div>
             </div>
-            <div className="members">
-              {mapOverMembers(bubbleData.members)}
+            <div className="bubble">
+              <div className="bubbleInfo">
+                <div className="bubbleName">
+                  <h2>{bubbleData.name}</h2>
+                  <button onClick={(e)=>this.toggleBubbleSettingsVisibility()}>
+                    <h2>{ userData.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
+                  </button>
+                </div>
+              </div>
+              <div className="members">
+                {mapOverMembers(bubbleData.members)}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        }
+      </>
     );
   }
 
