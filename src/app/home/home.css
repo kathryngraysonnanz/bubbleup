@@ -62,6 +62,11 @@ h2, p {
   align-items: center;
 }
 
+.bubbleName button {
+  border: none;
+  background-color: transparent;
+}
+
 .bubbleDetails {
   display: flex;
 }

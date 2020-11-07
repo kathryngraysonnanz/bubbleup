@@ -6,7 +6,7 @@ import { db } from "../services/firebase"
 
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog, faUserCircle, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import './checkin.css';
 
 export default class Checkin extends React.Component {
@@ -73,8 +73,7 @@ export default class Checkin extends React.Component {
     let today = new Date().toISOString().substring(0,10);
 
     return (
-      <div className="checkinBackground">
-        {console.log(today)}
+      <div className="overlayBackground">
         <div className="contentWrapper">
           <div className="title">
             <h1><b>Check</b> In</h1>
@@ -248,7 +247,7 @@ export default class Checkin extends React.Component {
             <h3>Do you have a status update or message to add to your check-in?</h3>
             <textarea onChange={this.updateStatus} maxLength="300" id="status" name="status"></textarea>
 
-            <Button type="submit">Share with my bubble</Button>
+            <Button type="submit"><FontAwesomeIcon icon={faCalendarCheck} /> Share with my bubble</Button>
           </form>
         </div>
       </div>

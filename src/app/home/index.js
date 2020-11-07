@@ -5,6 +5,7 @@ import { auth } from "../services/firebase";
 import { db } from "../services/firebase"
 
 import Checkin from '../checkin'
+import BubbleSettings from '../bubble-settings'
 
 import Accordion from '../components/accordion'
 import Button from '../components/button'
@@ -18,13 +19,15 @@ export default class Home extends React.Component {
     super(props);
     this.state = {
       checkinVisible: false,
+      bubbleSettingsVisible: false,
       user: auth().currentUser,
       bubbles: [],
       readError: null,
       writeError: null
     };
     this.handleChange = this.handleChange.bind(this);
-    this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this)
+    this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
+    this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
   }
 
   async componentDidMount() {
@@ -50,6 +53,10 @@ export default class Home extends React.Component {
 
   toggleCheckinVisibility() {
     this.setState({ checkinVisible: !this.state.checkinVisible });
+  }
+
+  toggleBubbleSettingsVisibility() {
+    this.setState({ bubbleSettingsVisible: !this.state.bubbleSettingsVisible });
   }
 
 
@@ -232,6 +239,7 @@ export default class Home extends React.Component {
     return (
       <div className="background">
         { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
+        { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
         <div className="contentWrapper">
           <div className="welcome">
             <h1>Welcome back, <b>{userData.name}</b>&nbsp;<FontAwesomeIcon icon={faUserCircle} /></h1>
@@ -246,7 +254,9 @@ export default class Home extends React.Component {
             <div className="bubbleInfo">
               <div className="bubbleName">
                 <h2>{bubbleData.name}</h2>
-                <h2>{ userData.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
+                <button onClick={(e)=>this.toggleBubbleSettingsVisibility()}>
+                  <h2>{ userData.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
+                </button>
               </div>
               <div className="bubbleDetails">
                 <p>{bubbleData.members.length} members </p>

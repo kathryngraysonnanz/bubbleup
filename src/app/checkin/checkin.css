@@ -1,4 +1,4 @@
-.checkinBackground {
+.overlayBackground {
   top: 0;
   position: absolute;
   width: 100%;
@@ -13,7 +13,7 @@ hr {
   margin: 20px 0;
 }
 
-.checkinBackground p {
+.overlayBackground p {
   color: white;
 }
 
