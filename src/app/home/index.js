@@ -38,7 +38,7 @@ export default class Home extends React.Component {
       user: auth().currentUser,
       name: '',
       lastCheckIn: 'never',
-      isAdmin: false,
+      admin: false,
       bubble: false,
       readError: null,
       writeError: null
@@ -65,7 +65,15 @@ export default class Home extends React.Component {
         try {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
-            this.setState ({ name: username })
+            var bubble = (snapshot.val() && snapshot.val().bubble) || false;
+            var admin = (snapshot.val() && snapshot.val().admin) || false;
+            var lastCheckIn = (snapshot.val() && snapshot.val().admin) || 'never';
+            this.setState ({
+              name: username,
+              bubble: bubble,
+              admin: admin,
+              lastCheckIn: lastCheckIn
+            })
           });
         } catch (error) {
           this.setState({ readError: error.message });

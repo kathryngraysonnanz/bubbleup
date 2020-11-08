@@ -36,8 +36,11 @@ export default class BubbleSetup extends React.Component {
     });
 
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
-      bubble: bubbleUUID
+      bubble: bubbleUUID,
+      admin: true
     });
+
+    this.props.toggle()
   }
 
   async handleBubbleCreation(event) {
