@@ -7,13 +7,14 @@ import { db } from "../services/firebase"
 import Checkin from '../checkin'
 import BubbleSettings from '../bubble-settings'
 import UserSettings from '../user-settings'
+import BubbleSetup from '../bubble-setup'
 
 import { signup, signin, signout } from '../helpers/auth';
 
 import Accordion from '../components/accordion'
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog, faUserCircle, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faUserCircle, faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons'
 import './home.css';
 
 export default class Home extends React.Component {
@@ -26,22 +27,29 @@ export default class Home extends React.Component {
       error: null,
       email: '',
       password: '',
+      username: '',
       login: true,
 
       checkinVisible: false,
       bubbleSettingsVisible: false,
       userSettingsVisible: false,
+      bubbleSetupVisible: false,
 
       user: auth().currentUser,
-      bubbles: [],
+      name: '',
+      lastCheckIn: 'never',
+      isAdmin: false,
+      bubble: false,
       readError: null,
       writeError: null
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
 
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
+    this.toggleBubbleSetupVisibility = this.toggleBubbleSetupVisibility.bind(this);
     this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
     this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
@@ -53,6 +61,15 @@ export default class Home extends React.Component {
           authenticated: true,
           loading: false,
         });
+
+        try {
+          db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
+            var username = (snapshot.val() && snapshot.val().username) || 'User';
+            this.setState ({ name: username })
+          });
+        } catch (error) {
+          this.setState({ readError: error.message });
+        }
       } else {
         this.setState({
           authenticated: false,
@@ -68,11 +85,13 @@ export default class Home extends React.Component {
     });
   }
 
-  writeUserData(userId, email) {
+  writeUserData(userId, email, username) {
     firebase.database().ref('users/' + userId).set({
-      email: email
+      email: email,
+      username: username,
+      bubble: false,
+      lastCheckIn: 'never'
     });
-    console.log('write')
   }
 
   async handleSignUp(event) {
@@ -83,7 +102,11 @@ export default class Home extends React.Component {
     } catch (error) {
       this.setState({ error: error.message });
     }
-    this.writeUserData(firebase.auth().currentUser.uid, firebase.auth().currentUser.email)
+    this.writeUserData(
+      firebase.auth().currentUser.uid,
+      firebase.auth().currentUser.email,
+      this.state.username
+    )
   }
 
   async handleSignIn(event) {
@@ -114,20 +137,19 @@ export default class Home extends React.Component {
     this.setState({ userSettingsVisible: !this.state.userSettingsVisible });
   }
 
+  toggleBubbleSetupVisibility() {
+    this.setState({ bubbleSetupVisible: !this.state.bubbleSetupVisible });
+  }
+
 
   render() {
 
-    let userData = {
-      name: "Kathryn",
-      lastCheckIn: "2020-10-31",
-      bubble: 'uuid',
-      admin: true
-    }
+    let bubbleData
 
+    /*
     let bubbleData = {
       uuid: 'uuid',
       name: "The Squad",
-      rules: 'yep we have rules',
       members: [
         {
           name: 'Adam Zweisteisteinger Euralious',
@@ -232,7 +254,7 @@ export default class Home extends React.Component {
           ]
         }
       ]
-    }
+    } */
 
     function mapOverMembers(members){
       return (
@@ -303,12 +325,18 @@ export default class Home extends React.Component {
                   Create an account
                 </h3>
                 <p>Already have an account?  <button onClick={()=>this.setState({ login: true })}>Login!</button></p>
-                <form onSubmit={this.handleSignUp}>
+                <form onSubmit={this.handleSignUp} className="signup">
                   <div>
-                    <input placeholder="Email" name="email" type="email" onChange={this.handleChange} value={this.state.email}></input>
+                    <input placeholder="Email" name="email" type="email"
+                    onChange={this.handleChange} value={this.state.email}></input>
                   </div>
                   <div>
-                    <input placeholder="Password" name="password" onChange={this.handleChange} value={this.state.password} type="password"></input>
+                    <input placeholder="Username" name="username" type="username"
+                    onChange={this.handleChange} value={this.state.username}></input>
+                  </div>
+                  <div>
+                    <input placeholder="Password" name="password" type="password"
+                    onChange={this.handleChange} value={this.state.password}></input>
                   </div>
                   <div>
                     {this.state.error ? <p>{this.state.error}</p> : null}
@@ -323,7 +351,7 @@ export default class Home extends React.Component {
                 Login to your account
               </h3>
               <p>No account? <button onClick={()=>this.setState({ login: false })}>Create one!</button></p>
-              <form onSubmit={this.handleSignIn}>
+              <form onSubmit={this.handleSignIn} className="signin">
                 <div>
                   <input
                     placeholder="Email"
@@ -359,14 +387,15 @@ export default class Home extends React.Component {
           { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
           { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
           { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
+          { this.state.bubbleSetupVisible && <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/> }
           <div className="contentWrapper">
             <div className="welcome">
-              <h1>Welcome back, <b>{userData.name}</b>&nbsp;
+              <h1>Welcome back, <b>{this.state.name}</b>&nbsp;
               <button onClick={(e)=>this.toggleUserSettingsVisibility()}>
                 <FontAwesomeIcon icon={faUserCircle} />
               </button></h1>
               <div>
-                <p>Your last check-in was {userData.lastCheckIn} •
+                <p>Your last check-in was {this.state.lastCheckIn} •
                  <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
                 </p>
                 <Button onClick={(e)=>this.toggleCheckinVisibility()}>
@@ -375,17 +404,31 @@ export default class Home extends React.Component {
               </div>
             </div>
             <div className="bubble">
-              <div className="bubbleInfo">
-                <div className="bubbleName">
-                  <h2>{bubbleData.name}</h2>
-                  <button onClick={(e)=>this.toggleBubbleSettingsVisibility()}>
-                    <h2>{ userData.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
-                  </button>
+              { bubbleData &&
+                <>
+                <div className="bubbleInfo">
+                  <div className="bubbleName">
+                    <h2>{bubbleData.name}</h2>
+                    <button onClick={(e)=>this.toggleBubbleSettingsVisibility()}>
+                      <h2>{ this.state.isAdmin && <FontAwesomeIcon icon={faCog} /> }</h2>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="members">
-                {mapOverMembers(bubbleData.members)}
-              </div>
+                <div className="members">
+                  {mapOverMembers(bubbleData.members)}
+                </div>
+                </>
+              }
+              { !bubbleData &&
+                <div className="noBubble">
+                  <h3>You're not part of a bubble yet!</h3>
+                  <p>For privacy purposes, bubbles are invitation-only and
+                  non-discoverable. You must be invited by a member in order
+                  to join an existing bubble.
+                 </p>
+                  <Button onClick={(e)=>this.toggleBubbleSetupVisibility()}><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
+                </div>
+              }
             </div>
           </div>
         </div>
