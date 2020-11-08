@@ -68,6 +68,13 @@ export default class Home extends React.Component {
     });
   }
 
+  writeUserData(userId, email) {
+    firebase.database().ref('users/' + userId).set({
+      email: email
+    });
+    console.log('write')
+  }
+
   async handleSignUp(event) {
     event.preventDefault();
     this.setState({ error: '' });
@@ -76,6 +83,7 @@ export default class Home extends React.Component {
     } catch (error) {
       this.setState({ error: error.message });
     }
+    this.writeUserData(firebase.auth().currentUser.uid, firebase.auth().currentUser.email)
   }
 
   async handleSignIn(event) {
@@ -90,9 +98,7 @@ export default class Home extends React.Component {
 
   signOutUser() {
     firebase.auth().signOut().then(function() {
-      // Sign-out successful.
     }).catch(function(error) {
-      // An error happened.
     });
   }
 
