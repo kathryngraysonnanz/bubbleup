@@ -35,7 +35,7 @@ export default class BubbleSetup extends React.Component {
       pendingMembers: invitesArray
     });
 
-    firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
+    firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
       bubble: bubbleUUID
     });
   }
