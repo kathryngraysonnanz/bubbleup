@@ -39,6 +39,7 @@ export default class Home extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
 
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
@@ -79,7 +80,7 @@ export default class Home extends React.Component {
 
   async handleSignIn(event) {
     event.preventDefault();
-    this.setState({ error: "" });
+    this.setState({ error: '' });
     try {
       await signin(this.state.email, this.state.password);
     } catch (error) {
