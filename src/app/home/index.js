@@ -288,12 +288,14 @@ export default class Home extends React.Component {
       <>
         { !this.state.authenticated &&
           <div className="authPage">
+            <div>
             <h1>Welcome to <b>BubbleUp!</b></h1>
             { !this.state.login &&
               <>
                 <h3>
                   Create an account
                 </h3>
+                <p>Already have an account?  <button onClick={()=>this.setState({ login: true })}>Login!</button></p>
                 <form onSubmit={this.handleSignUp}>
                   <div>
                     <input placeholder="Email" name="email" type="email" onChange={this.handleChange} value={this.state.email}></input>
@@ -303,9 +305,8 @@ export default class Home extends React.Component {
                   </div>
                   <div>
                     {this.state.error ? <p>{this.state.error}</p> : null}
-                    <button type="submit">Sign up</button>
+                    <Button type="submit">Sign up</Button>
                   </div>
-                  <hr></hr>
                 </form>
               </>
             }
@@ -314,7 +315,7 @@ export default class Home extends React.Component {
               <h3>
                 Login to your account
               </h3>
-              <p>No account? Create one!</p>
+              <p>No account? <button onClick={()=>this.setState({ login: false })}>Create one!</button></p>
               <form onSubmit={this.handleSignIn}>
                 <div>
                   <input
@@ -340,10 +341,10 @@ export default class Home extends React.Component {
                   ) : null}
                   <Button type="submit">Login</Button>
                 </div>
-                <hr />
               </form>
             </>
             }
+            </div>
           </div>
         }
         { this.state.authenticated &&
