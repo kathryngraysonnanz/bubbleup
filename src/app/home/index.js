@@ -40,6 +40,8 @@ export default class Home extends React.Component {
       lastCheckIn: 'never',
       admin: false,
       bubble: false,
+      bubbleData: false,
+
       readError: null,
       writeError: null
     };
@@ -47,6 +49,7 @@ export default class Home extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
+    this.getBubbleData = this.getBubbleData.bind(this);
 
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleBubbleSetupVisibility = this.toggleBubbleSetupVisibility.bind(this);
@@ -54,7 +57,7 @@ export default class Home extends React.Component {
     this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
@@ -65,7 +68,7 @@ export default class Home extends React.Component {
         try {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
-            var bubble = (snapshot.val() && snapshot.val().bubble) || false;
+            let bubble = (snapshot.val() && snapshot.val().bubble) || false;
             var admin = (snapshot.val() && snapshot.val().admin) || false;
             var lastCheckIn = (snapshot.val() && snapshot.val().admin) || 'never';
             this.setState ({
@@ -78,13 +81,25 @@ export default class Home extends React.Component {
         } catch (error) {
           this.setState({ readError: error.message });
         }
+
+        try {
+          db.ref("/bubbles/" + this.state.bubble).on("value", snapshot => {
+            var bubbleData = (snapshot.val() && snapshot.val().members) || "test";
+            this.setState ({
+              bubbleData: bubbleData
+            });
+          });
+        } catch (error) {
+          this.setState({ error: error.message });
+        }
+        
       } else {
         this.setState({
           authenticated: false,
           loading: false,
         });
       }
-    })
+    });
   }
 
   handleChange(event) {
@@ -122,6 +137,19 @@ export default class Home extends React.Component {
     this.setState({ error: '' });
     try {
       await signin(this.state.email, this.state.password);
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  getBubbleData(){
+    try {
+      db.ref("/bubbles/" + this.state.bubble).on("value", snapshot => {
+        var bubbleData = (snapshot.val() && snapshot.val().members) || "test";
+        this.setState ({
+          bubbleData: bubbleData
+        });
+      });
     } catch (error) {
       this.setState({ error: error.message });
     }
