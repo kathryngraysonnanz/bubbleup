@@ -13,12 +13,12 @@ export default class Checkin extends React.Component {
 
   constructor(props) {
     super(props);
-    this.updateEndDate = this.updateEndDate.bind(this);
-    this.updateStatus = this.updateStatus.bind(this);
     this.state = {
       user: auth().currentUser,
       readError: null,
       writeError: null,
+
+      checkInDate: new Date().toISOString().substring(0,10),
 
       socialized: false,
       indoors: false,
@@ -33,39 +33,134 @@ export default class Checkin extends React.Component {
       publicSpace: false,
 
       tested: false,
-      testResults: '',
+      testResults: false,
 
       contactPositive: false,
 
       symptoms: false,
 
       quarantining: false,
-      quarantineEnd: '',
+      quarantineEnd: false,
 
-      status: ''
+      status: false
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.setTested = this.setTested.bind(this);
+    this.setSocialized = this.setSocialized.bind(this);
+    this.setTravel = this.setTravel.bind(this);
+    this.setQuarantine = this.setQuarantine.bind(this);
   }
 
   async handleSubmit(event) {
     event.preventDefault();
     this.setState({ writeError: null });
+
     try {
-      await db.ref("bubbles").push({
-        bubbles: this.state.names,
-        timestamp: Date.now()
+      if (this.state.socialized === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          socialized: [this.state.socialized, this.state.checkInDate],
+          indoors: [this.state.indoors],
+          unmasked: [this.state.unmasked],
+          notDistant: [this.state.notDistant]
+        });
+      }
+
+      if (this.state.travel === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          travel: [this.state.travel, this.state.checkInDate],
+          overnight: [this.state.overnight]
+        });
+      }
+
+      if (this.state.publicTransport === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          publicTransport: [this.state.publicTransport, this.state.checkInDate]
+        });
+      }
+
+      if (this.state.publicSpace === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          publicSpace: [this.state.publicSpace, this.state.checkInDate]
+        });
+      }
+
+      if (this.state.tested === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          tested: [this.state.tested, this.state.checkInDate],
+          testResults: [this.state.testResults]
+        });
+      }
+
+      if (this.state.contactPositive === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          contactPositive: [this.state.contactPositive, this.state.checkInDate]
+        });
+      }
+
+      if (this.state.symptoms === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          symptoms: [this.state.symptoms, this.state.checkInDate]
+        });
+      }
+
+      if (this.state.quarantining === true) {
+        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          quarantining: [this.state.quarantining, this.state.checkInDate],
+          quarantineEnd: [this.state.quarantineEnd]
+        });
+      }
+
+      db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        status: [this.state.status, this.state.checkInDate]
       });
-      this.setState({ bubbles: '' });
     } catch (error) {
       this.setState({ writeError: error.message });
     }
   }
 
-  updateEndDate(event) {
-    this.setState({ quarantineEnd: event.target.value });
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   }
 
-  updateStatus(event) {
-    this.setState({ status: event.target.value });
+  setTested(event){
+    if (event.target.checked == true) {
+      this.setState({tested: true})
+    } else {
+      this.setState({tested: false})
+      this.setState({testResults: false})
+    }
+  }
+
+  setSocialized(event){
+    if (event.target.checked == true) {
+      this.setState({socialized: true})
+    } else {
+      this.setState({socialized: false})
+      this.setState({indoors: false})
+      this.setState({masked: false})
+      this.setState({distanced: false})
+    }
+  }
+
+  setTravel(event){
+    if (event.target.checked == true) {
+      this.setState({travel: true})
+    } else {
+      this.setState({travel: false})
+      this.setState({overnight: false})
+    }
+  }
+
+  setQuarantine(event){
+    if (event.target.checked == true) {
+      this.setState({quarantining: true})
+    } else {
+      this.setState({quarantining: false})
+      this.setState({quarantineEnd: false})
+    }
   }
 
   render() {
@@ -82,9 +177,9 @@ export default class Checkin extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <div className="dateWrapper">
               <label for="checkInDate">This check-in is for:</label>
-              <input type="date" id="checkInDate" name="Check-in Date"
-                   value={today}
-                   min="2018-01-01" max={today}/>
+              <input type="date" id="checkInDate" name="checkInDate"
+                   value={today} min="2018-01-01" max={today}
+                   onClick={this.handleChange}/>
             </div>
             <p>All questions are optional, but remember – <b>an effective bubble is
             built on honesty and communication!</b></p>
@@ -95,7 +190,7 @@ export default class Checkin extends React.Component {
 
             <div>
               <input
-                onClick={(e)=>this.setState({socialized: !this.state.socialized})}
+                onClick={this.setSocialized}
                 type="checkbox" id="socialized" name="socialized"/>
               <label for="socialized">Socialize with people outside the bubble?</label>
             </div>
@@ -128,7 +223,7 @@ export default class Checkin extends React.Component {
 
             <div>
               <input
-                onClick={(e)=>this.setState({travel: !this.state.travel})}
+                onClick={this.setTravel}
                 type="checkbox" id="travel" name="travel"/>
               <label for="travel">Travel outside your city / town / immediate area?</label>
             </div>
@@ -169,7 +264,7 @@ export default class Checkin extends React.Component {
 
             <div>
               <input
-                onClick={(e)=>this.setState({tested: !this.state.tested})}
+                onClick={this.setTested}
                 type="checkbox" id="tested" name="tested"/>
               <label for="tested">Get tested for Covid-19?</label>
             </div>
@@ -216,7 +311,7 @@ export default class Checkin extends React.Component {
 
             <div>
               <input
-                onClick={(e)=>this.setState({quarantining: !this.state.quarantining})}
+                onClick={this.setQuarantine}
                 type="checkbox" id="quarantining" name="quarantining"/>
               <label for="quarantining">Start or continue a quarantine? </label>
             </div>
@@ -230,7 +325,7 @@ export default class Checkin extends React.Component {
                   <label for="yes">Yes, my quarantine will end on
                     <label for="endDate"></label>
                     <input type="date" id="endDate" name="Quarantine end date"
-                    onChange={this.updateEndDate}/>
+                    onChange={this.handleChange}/>
                   </label>
                 </div>
 
@@ -245,7 +340,7 @@ export default class Checkin extends React.Component {
             <hr/>
 
             <h3>Do you have a status update or message to add to your check-in?</h3>
-            <textarea onChange={this.updateStatus} maxLength="300" id="status" name="status"></textarea>
+            <textarea onChange={this.handleChange} maxLength="300" id="status" name="status"></textarea>
 
             <Button type="submit"><FontAwesomeIcon icon={faCalendarCheck} /> Share with my bubble</Button>
           </form>

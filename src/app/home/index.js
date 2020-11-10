@@ -392,7 +392,7 @@ export default class Home extends React.Component {
         }
         { this.state.authenticated &&
         <div className="background">
-          { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility}/> }
+          { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility} bubble={this.state.bubble}/> }
           { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
           { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
           { this.state.bubbleSetupVisible && <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/> }

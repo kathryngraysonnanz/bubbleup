@@ -29,13 +29,18 @@ export default class BubbleSetup extends React.Component {
 
   writeBubbleData(bubbleName, bubbleUUID, invites) {
     var invitesArray = invites.split(',');
+    let user = firebase.auth().currentUser.uid
 
-    firebase.database().ref('bubbles/' + bubbleUUID).set({
+    db.ref('bubbles/' + bubbleUUID).set({
       name: bubbleName,
       pendingMembers: invitesArray
     });
 
-    firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+    db.ref('bubbles/' + bubbleUUID + '/members').update({
+      [user]: false
+    })
+
+    db.ref('users/' + user).update({
       bubble: bubbleUUID,
       admin: true
     });
