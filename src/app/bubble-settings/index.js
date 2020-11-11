@@ -13,23 +13,28 @@ export default class BubbleSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.updateName = this.updateName.bind(this);
     this.state = {
       user: auth().currentUser,
       readError: null,
       writeError: null,
+      invites: '',
 
-      bubbleName: '',
+      bubbleName: this.props.name
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async handleSubmit(event) {
     event.preventDefault();
     this.setState({ writeError: null });
+
+    var invitesArray = this.state.invites.split(',');
+
     try {
-      await db.ref("bubbles").push({
-        bubbles: this.state.names,
-        timestamp: Date.now()
+      await db.ref('bubbles/' + this.props.bubbleId).update({
+        name: this.state.name,
+        pendingMembers: invitesArray
       });
       this.setState({ bubbles: '' });
     } catch (error) {
@@ -37,8 +42,10 @@ export default class BubbleSettings extends React.Component {
     }
   }
 
-  updateName(event) {
-    this.setState({ bubbleName: event.target.value });
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   }
 
   render() {
@@ -87,10 +94,20 @@ export default class BubbleSettings extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <h3>Bubble Name</h3>
             <p>Bubble names are optional and just for fun. We’ll use the name
-            “My Bubble” if nothing is provided. </p>
+            “My Bubble” if nothing is provided – currently, your bubble's name
+            is <b>{this.props.name}</b>. </p>
 
-            <input onChange={this.updateName} type="text" maxLength="60"
+            <input onChange={this.handleChange} type="text" maxLength="60"
             id="bubbleName" name="bubbleName"/>
+
+            <h3>Invite Members</h3>
+            <p>Your bubble should be a small, tight-knit group of people that all
+            interact regularly. All members of the bubble will be able
+            to see each others' check-in information. <b>You can leave this blank
+            for now and add members from the Bubble Settings page later.</b></p>
+            <p>Add emails for each person you'd like to invite, separating each
+            email address with a comma.</p>
+            <textarea id="invites" name="invites" onChange={this.handleChange}></textarea>
 
             <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
           </form>

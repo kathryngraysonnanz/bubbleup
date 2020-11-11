@@ -6,6 +6,7 @@ import { db } from "../services/firebase"
 
 import Button from '../components/button'
 import Accordion from '../components/accordion'
+import BubbleSettings from '../bubble-settings'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog, faUserCircle, faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons'
@@ -18,8 +19,17 @@ export default class Bubble extends React.Component {
     super(props);
     this.state = {
       readError: null,
-      writeError: null
+      writeError: null,
+      admin: this.props.admin,
+
+      bubbleSettingsVisible: false,
     }
+    this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
+  }
+
+
+  toggleBubbleSettingsVisibility() {
+    this.setState({ bubbleSettingsVisible: !this.state.bubbleSettingsVisible });
   }
 
   componentDidMount(){
@@ -177,13 +187,21 @@ export default class Bubble extends React.Component {
 
     return (
       <div className="bubble">
+        { this.state.bubbleSettingsVisible &&
+          <BubbleSettings
+            toggle={this.toggleBubbleSettingsVisibility}
+            members={this.state.members}
+            name={this.state.name}
+            bubbleId={this.props.bubbleID}
+          />
+        }
         { this.props.bubbleID &&
           <>
           <div className="bubbleInfo">
             <div className="bubbleName">
               <h2>{this.state.name}</h2>
-              <button onClick={(e)=>this.toggleBubbleSettingsVisibility()}>
-                <h2>{ this.state.isAdmin && <FontAwesomeIcon icon={faCog} /> }</h2>
+              <button onClick={(e) => this.toggleBubbleSettingsVisibility()}>
+                <h2>{ this.state.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
               </button>
             </div>
           </div>

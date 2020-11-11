@@ -5,7 +5,6 @@ import { auth } from "../services/firebase";
 import { db } from "../services/firebase"
 
 import Checkin from '../checkin'
-import BubbleSettings from '../bubble-settings'
 import UserSettings from '../user-settings'
 import BubbleSetup from '../bubble-setup'
 import Bubble from '../bubble'
@@ -31,7 +30,6 @@ export default class Home extends React.Component {
       login: true,
 
       checkinVisible: false,
-      bubbleSettingsVisible: false,
       userSettingsVisible: false,
       bubbleSetupVisible: false,
 
@@ -51,7 +49,6 @@ export default class Home extends React.Component {
 
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleBubbleSetupVisibility = this.toggleBubbleSetupVisibility.bind(this);
-    this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
     this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
 
@@ -137,10 +134,6 @@ export default class Home extends React.Component {
 
   toggleCheckinVisibility() {
     this.setState({ checkinVisible: !this.state.checkinVisible });
-  }
-
-  toggleBubbleSettingsVisibility() {
-    this.setState({ bubbleSettingsVisible: !this.state.bubbleSettingsVisible });
   }
 
   toggleUserSettingsVisibility() {
@@ -233,7 +226,6 @@ export default class Home extends React.Component {
             />
           }
           { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
-          { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
           { this.state.bubbleSetupVisible && <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/> }
           <div className="contentWrapper">
             <div className="welcome">
@@ -251,7 +243,11 @@ export default class Home extends React.Component {
               </div>
             </div>
             { this.state.bubble &&
-            <Bubble bubbleID={this.state.bubble}/> }
+            <Bubble
+              bubbleID={this.state.bubble}
+              admin={this.state.admin}
+              toggle={this.toggleBubbleSettingsVisibility}
+            /> }
           </div>
         </div>
         }
