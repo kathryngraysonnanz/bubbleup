@@ -45,18 +45,118 @@ export default class Bubble extends React.Component {
         <>
           {Object.entries(members).map(member =>
             <Accordion
-              title="Name"
+              title={member[1].name}
               isQuarantining={member[1].checkin.quarantining[0]}
-              lastCheckIn="last check in"
+              lastCheckIn={member[1].lastCheckIn}
               content={
                 <>
-                  { member[1].checkin.status &&
+                  { member[1].checkin.status[0] &&
                     <div className="status">
                       <p>Status:</p>
-                      <div>{member[1].checkin.status}</div>
+                      <div>{member[1].checkin.status[0]}</div>
                     </div>
                   }
-                  {member[1].checkin && mapOverCheckIn(member[1].checkin)}
+                  <div className="questionWrapper">
+                    {member[1].checkin.socialized &&
+                      <div className="question">
+                        <div className="days">
+                          <p>
+                            {daysSince(member[1].checkin.socialized[1])}
+                          </p>
+                          <p>days</p>
+                        </div>
+                        <p>Since last socialization outside the bubble
+                        {member[1].checkin.unmasked[0] && <> (unmasked) </>}
+                        {member[1].checkin.indoors[0] && <> (indoors) </>}
+                        {member[1].checkin.notDistant[0] && <> (notDistant) </>}
+                        </p>
+                      </div>
+                    }
+
+                    {member[1].checkin.travel &&
+                      <div className="question">
+                        <div className="days">
+                          <p>
+                            {daysSince(member[1].checkin.travel[1])}
+                          </p>
+                          <p>days</p>
+                        </div>
+                        <p>Since last travel outside the city / town
+                        {member[1].checkin.overnight[0] && <> (overnight) </>}
+                        </p>
+                      </div>
+                    }
+
+                    {member[1].checkin.publicTransport &&
+                      <div className="question">
+                        <div className="days">
+                          <p>
+                            {daysSince(member[1].checkin.publicTransport[1])}
+                          </p>
+                          <p>days</p>
+                        </div>
+                        <p>Since last use of public transportation
+                        </p>
+                      </div>
+                    }
+
+                    {member[1].checkin.publicSpace &&
+                      <div className="question">
+                        <div className="days">
+                          <p>
+                            {daysSince(member[1].checkin.publicSpace[1])}
+                          </p>
+                          <p>days</p>
+                        </div>
+                        <p>Since the last time they spent more than 15 minutes
+                        unmasked in a public space
+                        </p>
+                      </div>
+                    }
+
+                    {member[1].checkin.tested &&
+                      <div className="question">
+                        <div className="days">
+                          <p>
+                            {daysSince(member[1].checkin.tested[1])}
+                          </p>
+                          <p>days</p>
+                        </div>
+                        <p>Since their last Covid-19 test
+                        {member[1].checkin.testResults && <> (results:
+                           <b> {member[1].checkin.testResults}</b>)</>}
+                        </p>
+                      </div>
+                    }
+
+                    {member[1].checkin.contactPositive &&
+                      <div className="question">
+                        <div className="days">
+                          <p>
+                            {daysSince(member[1].checkin.contactPositive[1])}
+                          </p>
+                          <p>days</p>
+                        </div>
+                        <p>Since they last heard someone they were in regular
+                        contact with tested positive for Covid-19
+                        </p>
+                      </div>
+                    }
+
+                    {member[1].checkin.symptoms &&
+                      <div className="question">
+                        <div className="days">
+                          <p>
+                            {daysSince(member[1].checkin.symptoms[1])}
+                          </p>
+                          <p>days</p>
+                        </div>
+                        <p>Since they last experienced symptoms suspicious of
+                        Covid-19
+                        </p>
+                      </div>
+                    }
+                  </div>
                 </>
               }
             />
@@ -74,30 +174,6 @@ export default class Bubble extends React.Component {
 
       return Math.round(dayDifference)
     }
-
-    function mapOverCheckIn(checkin){
-      return (
-        <div className="questionWrapper">
-          {Object.entries(checkin).map((key, value) =>
-            <>
-              { key[1][0] &&
-                <div className="question">
-                  <div className="days">
-                    <p>
-                      {daysSince(key[1][1])}
-                    </p>
-                    <p>days</p>
-                  </div>
-                  <p>{key[0]}</p>
-                </div>
-              }
-            </>
-          )}
-        </div>
-      )
-    }
-
-
 
     return (
       <div className="bubble">

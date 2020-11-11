@@ -68,7 +68,7 @@ export default class Home extends React.Component {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
             let bubble = (snapshot.val() && snapshot.val().bubble) || false;
             var admin = (snapshot.val() && snapshot.val().admin) || false;
-            var lastCheckIn = (snapshot.val() && snapshot.val().admin) || 'never';
+            var lastCheckIn = (snapshot.val() && snapshot.val().lastCheckIn) || 'never';
             this.setState ({
               name: username,
               bubble: bubble,
@@ -225,7 +225,13 @@ export default class Home extends React.Component {
         }
         { this.state.authenticated &&
         <div className="background">
-          { this.state.checkinVisible && <Checkin toggle={this.toggleCheckinVisibility} bubble={this.state.bubble}/> }
+          { this.state.checkinVisible &&
+            <Checkin
+              toggle={this.toggleCheckinVisibility}
+              bubble={this.state.bubble}
+              name={this.state.name}
+            />
+          }
           { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
           { this.state.bubbleSettingsVisible && <BubbleSettings toggle={this.toggleBubbleSettingsVisibility}/> }
           { this.state.bubbleSetupVisible && <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/> }
@@ -244,7 +250,7 @@ export default class Home extends React.Component {
                 </Button>
               </div>
             </div>
-            { this.state.bubble && 
+            { this.state.bubble &&
             <Bubble bubbleID={this.state.bubble}/> }
           </div>
         </div>

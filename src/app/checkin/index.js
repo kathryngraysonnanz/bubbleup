@@ -57,6 +57,16 @@ export default class Checkin extends React.Component {
     this.setState({ writeError: null });
 
     try {
+
+      db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid).update({
+        name: this.props.name,
+        lastCheckIn: this.state.checkInDate
+      });
+
+      db.ref('users/' + firebase.auth().currentUser.uid ).update({
+        name: this.state.checkInDate
+      });
+
       if (this.state.socialized === true) {
         db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           socialized: [this.state.socialized, this.state.checkInDate],
@@ -178,8 +188,8 @@ export default class Checkin extends React.Component {
             <div className="dateWrapper">
               <label for="checkInDate">This check-in is for:</label>
               <input type="date" id="checkInDate" name="checkInDate"
-                   value={today} min="2018-01-01" max={today}
-                   onClick={this.handleChange}/>
+                 min="2018-01-01" max={today}
+                   onChange={this.handleChange}/>
             </div>
             <p>All questions are optional, but remember – <b>an effective bubble is
             built on honesty and communication!</b></p>

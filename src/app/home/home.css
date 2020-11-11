@@ -48,36 +48,6 @@ h2, p {
   height: 100%;
 }
 
-.bubbleInfo {
-  position: sticky;
-  top: 0;
-  background-color: white;
-  z-index: 98;
-  border-bottom: 1px solid grey;
-  padding: 10px 0;
-}
-
-.bubbleName {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.bubbleName button, .welcome h1 button {
-  border: none;
-  background-color: transparent;
-  font-size: inherit;
-  color: inherit;
-}
-
-.bubbleDetails {
-  display: flex;
-}
-
-.bubbleDetails p:first-child {
-  margin: 0 3px;
-}
-
 .welcome {
   padding: 10px 15px 0;
 }
@@ -92,70 +62,6 @@ h2, p {
 .welcome div p {
   margin-right: 10px;
   color: white;
-}
-
-.bubble {
-  background-color: white;
-  border-radius: 10px 10px 0 0;
-  flex: 1 1 auto;
-  padding: 0 25px;
-  overflow: scroll;
-  -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.1);
-  box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.1);
-}
-
-.status {
-  margin-bottom: 10px;
-}
-
-.status p {
-  font-size: 1rem;
-}
-
-.status div {
-  background-color: #E5E9EE;
-  padding: 5px;
-  border-radius: 2px;
-}
-
-.days {
-  text-align: center;
-  background-color: #E5E9EE;
-  padding: 5px;
-  border-radius: 2px;
-  margin-right: 8px;
-  width: 40px;
-}
-
-.days p {
-  font-family: 'Quicksand', sans-serif;
-  font-weight: bold;
-  font-size: 1.8rem;
-  margin: -5px 0;
-}
-
-.days p:last-child {
-  font-size: 0.75rem;
-  font-weight: 100;
-  margin: 0;
-}
-
-.question {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 5px;
-  min-width: 45%;
-}
-
-.question > p {
-  font-size: 1rem;
-}
-
-.questionWrapper {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 100%;
 }
 
 .signOut {
@@ -225,16 +131,6 @@ h2, p {
   background-color: transparent;
   text-decoration: underline;
   margin: 0;
-}
-
-.noBubble {
-  max-width: 500px;
-  margin: 30px auto 0;
-  text-align: center;
-}
-
-.noBubble > * {
-  margin-bottom: 15px;
 }
 
 @media (max-width: 500px){
