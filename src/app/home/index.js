@@ -8,10 +8,10 @@ import Checkin from '../checkin'
 import BubbleSettings from '../bubble-settings'
 import UserSettings from '../user-settings'
 import BubbleSetup from '../bubble-setup'
+import Bubble from '../bubble'
 
 import { signup, signin, signout } from '../helpers/auth';
 
-import Accordion from '../components/accordion'
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog, faUserCircle, faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons'
@@ -40,7 +40,6 @@ export default class Home extends React.Component {
       lastCheckIn: 'never',
       admin: false,
       bubble: false,
-      bubbleData: false,
 
       readError: null,
       writeError: null
@@ -49,7 +48,6 @@ export default class Home extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
-    this.getBubbleData = this.getBubbleData.bind(this);
 
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleBubbleSetupVisibility = this.toggleBubbleSetupVisibility.bind(this);
@@ -82,17 +80,6 @@ export default class Home extends React.Component {
           this.setState({ readError: error.message });
         }
 
-        try {
-          db.ref("/bubbles/" + this.state.bubble).on("value", snapshot => {
-            var bubbleData = (snapshot.val() && snapshot.val().members) || "test";
-            this.setState ({
-              bubbleData: bubbleData
-            });
-          });
-        } catch (error) {
-          this.setState({ error: error.message });
-        }
-        
       } else {
         this.setState({
           authenticated: false,
@@ -142,19 +129,6 @@ export default class Home extends React.Component {
     }
   }
 
-  getBubbleData(){
-    try {
-      db.ref("/bubbles/" + this.state.bubble).on("value", snapshot => {
-        var bubbleData = (snapshot.val() && snapshot.val().members) || "test";
-        this.setState ({
-          bubbleData: bubbleData
-        });
-      });
-    } catch (error) {
-      this.setState({ error: error.message });
-    }
-  }
-
   signOutUser() {
     firebase.auth().signOut().then(function() {
     }).catch(function(error) {
@@ -179,175 +153,6 @@ export default class Home extends React.Component {
 
 
   render() {
-
-    let bubbleData
-
-    /*
-    let bubbleData = {
-      uuid: 'uuid',
-      name: "The Squad",
-      members: [
-        {
-          name: 'Adam Zweisteisteinger Euralious',
-          isQuarantining: [false, null],
-          status: "Having a great time!",
-          lastCheckIn: '2020-11-02',
-          checkIn: [
-            {
-              question: "socialized",
-              answer: true,
-              details: {
-                masked: true,
-                distanced: false,
-                outdoors: true,
-              },
-              date: '2020-10-31'
-            },
-            {
-              question: "travel",
-              answer: false,
-              date: '2020-11-01'
-            },
-            {
-              question: "public transport",
-              answer: false,
-              date: '2020-11-01'
-            },
-            {
-              question: "inside",
-              answer: true,
-              date: '2020-11-01'
-            },
-            {
-              question: "tested",
-              answer: true,
-              details: {
-                results: "negative"
-              },
-              date: '2020-11-01'
-            },
-            {
-              question: "contact with positive",
-              answer: true,
-              date: '2020-10-20'
-            },
-            {
-              question: "symptoms",
-              answer: false,
-              date: '2020-11-01'
-            }
-          ]
-        },
-        {
-          name: 'K',
-          isQuarantining: [true, '2020-11-28'],
-          status: '',
-          lastCheckIn: '2020-11-01',
-          checkIn: [
-            {
-              question: "socialized",
-              answer: true,
-              details: {
-                masked: true,
-                distanced: false,
-                outdoors: true,
-              },
-              date: '2020-10-31'
-            },
-            {
-              question: "travel",
-              answer: false,
-              date: '2020-11-01'
-            },
-            {
-              question: "public transport",
-              answer: false,
-              date: '2020-11-01'
-            },
-            {
-              question: "inside",
-              answer: true,
-              date: '2020-11-01'
-            },
-            {
-              question: "tested",
-              answer: true,
-              details: {
-                results: "negative"
-              },
-              date: '2020-11-01'
-            },
-            {
-              question: "contact with positive",
-              answer: true,
-              date: '2020-10-20'
-            },
-            {
-              question: "symptoms",
-              answer: false,
-              date: '2020-11-01'
-            }
-          ]
-        }
-      ]
-    } */
-
-    function mapOverMembers(members){
-      return (
-        <>
-          {members && members.map(member => (
-            <Accordion
-              title={member.name}
-              isQuarantining={member.isQuarantining[0]}
-              lastCheckIn={member.lastCheckIn}
-              content={
-                <>
-                  { member.status &&
-                    <div className="status">
-                      <p>Status:</p>
-                      <div>{member.status}</div>
-                    </div>
-                  }
-                  {member.checkIn && mapOverCheckIn(member.checkIn)}
-                </>
-              }
-            />
-          ))}
-        </>
-      )
-    }
-
-    function daysSince(date){
-      let currentDate = new Date();
-      let questionDate = new Date(date);
-
-      let timeDifference = currentDate.getTime() - questionDate.getTime();
-      let dayDifference = timeDifference / (1000 * 3600 * 24);
-
-      return Math.round(dayDifference)
-    }
-
-    function mapOverCheckIn(checkIn){
-      return (
-        <div className="questionWrapper">
-        {checkIn && checkIn.map(question => (
-          <>
-            { question.answer &&
-              <div className="question">
-                <div className="days">
-                  <p>
-                    {daysSince(question.date)}
-                  </p>
-                  <p>days</p>
-                </div>
-                <p>{question.question}</p>
-              </div>
-            }
-          </>
-        ))}
-        </div>
-      )
-    }
 
     return (
       <>
@@ -439,33 +244,8 @@ export default class Home extends React.Component {
                 </Button>
               </div>
             </div>
-            <div className="bubble">
-              { bubbleData &&
-                <>
-                <div className="bubbleInfo">
-                  <div className="bubbleName">
-                    <h2>{bubbleData.name}</h2>
-                    <button onClick={(e)=>this.toggleBubbleSettingsVisibility()}>
-                      <h2>{ this.state.isAdmin && <FontAwesomeIcon icon={faCog} /> }</h2>
-                    </button>
-                  </div>
-                </div>
-                <div className="members">
-                  {mapOverMembers(bubbleData.members)}
-                </div>
-                </>
-              }
-              { !bubbleData &&
-                <div className="noBubble">
-                  <h3>You're not part of a bubble yet!</h3>
-                  <p>For privacy purposes, bubbles are invitation-only and
-                  non-discoverable. You must be invited by a member in order
-                  to join an existing bubble.
-                 </p>
-                  <Button onClick={(e)=>this.toggleBubbleSetupVisibility()}><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
-                </div>
-              }
-            </div>
+            { this.state.bubble && 
+            <Bubble bubbleID={this.state.bubble}/> }
           </div>
         </div>
         }
