@@ -64,7 +64,7 @@ export default class Checkin extends React.Component {
       });
 
       db.ref('users/' + firebase.auth().currentUser.uid ).update({
-        name: this.state.checkInDate
+        lastCheckIn: this.state.checkInDate
       });
 
       if (this.state.socialized === true) {

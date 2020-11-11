@@ -103,3 +103,9 @@
 .bubbleDetails p:first-child {
   margin: 0 3px;
 }
+
+@media (max-width: 500px){
+  .question {
+    width: 100%;
+  }
+}
