@@ -127,6 +127,8 @@ export default class Checkin extends React.Component {
     } catch (error) {
       this.setState({ writeError: error.message });
     }
+
+    this.props.toggle()
   }
 
   handleChange(event) {
@@ -258,7 +260,7 @@ export default class Checkin extends React.Component {
 
             <div>
               <input
-                onClick={(e)=>this.setState({travel: !this.state.publicTransport})}
+                onClick={(e)=>this.setState({publicTransport: !this.state.publicTransport})}
                 type="checkbox" id="publicTransport" name="publicTransport"/>
               <label for="publicTransport">Use public transportation,
               such as a plane, bus, or subway?</label>
@@ -266,7 +268,7 @@ export default class Checkin extends React.Component {
 
             <div>
               <input
-                onClick={(e)=>this.setState({travel: !this.state.publicSpace})}
+                onClick={(e)=>this.setState({publicSpace: !this.state.publicSpace})}
                 type="checkbox" id="publicSpace" name="publicSpace"/>
               <label for="publicSpace">Eat inside a restaurant or otherwise
               spend more than  15 minutes unmasked in a public space?</label>
