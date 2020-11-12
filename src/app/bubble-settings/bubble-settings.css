@@ -15,6 +15,10 @@
   padding: 5px 10px;
 }
 
+.editBubbleMembers table tr td:nth-child(2) {
+  text-align: center;
+}
+
 .editBubbleMembers table tr:nth-child(even) {
   background-color: rgba(288, 288, 288, 0.2);
 }

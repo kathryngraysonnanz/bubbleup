@@ -6,7 +6,7 @@ import { db } from "../services/firebase"
 
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUserCog, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faUserCog, faCheckCircle, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import './bubble-settings.css';
 
 export default class BubbleSettings extends React.Component {
@@ -18,11 +18,12 @@ export default class BubbleSettings extends React.Component {
       readError: null,
       writeError: null,
       invites: '',
-
+      members: this.props.members,
       bubbleName: this.props.name
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.promote = this.promote.bind(this);
   }
 
   async handleSubmit(event) {
@@ -42,6 +43,10 @@ export default class BubbleSettings extends React.Component {
     }
   }
 
+  promote(memberId) {
+    console.log("admin", memberId)
+  }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -50,18 +55,32 @@ export default class BubbleSettings extends React.Component {
 
   render() {
 
-    let members = ["Adam", "K"]
+    function promoteToAdmin(memberId) {
+      return(
+        <button onClick={(e) => this.promote()}>
+          <FontAwesomeIcon icon={faUserPlus} /> <span>Promote to admin</span>
+        </button>
+      )
+    }
 
-    function renderMemberEditRows(members){
+    function renderMemberEditRows(members, promote){
       return (
         <>
-        {members && members.map(member => (
-          <tr>
-            <td>{member}</td>
-            <td><button><FontAwesomeIcon icon={faUserCog} /> <span>Promote to admin</span></button></td>
-            <td><button><FontAwesomeIcon icon={faSignOutAlt} /> <span>Remove from bubble</span></button></td>
-          </tr>
-        ))}
+          {Object.entries(members).map(member =>
+            <tr key={member[1].name}>
+              {console.log(member[0])}
+              <td>{member[1].name}</td>
+              <td>
+                { member[1].admin &&
+                  <><FontAwesomeIcon icon={faUserCog} /> Admin</>
+                }
+                { !member[1].admin &&
+                  promote(member[0])
+                }
+              </td>
+              <td><button><FontAwesomeIcon icon={faSignOutAlt} /> <span>Remove from bubble</span></button></td>
+            </tr>
+          )}
         </>
       )
     }
@@ -87,7 +106,7 @@ export default class BubbleSettings extends React.Component {
 
             <table>
               <tbody>
-              {renderMemberEditRows(members)}
+              {renderMemberEditRows(this.state.members, this.promote)}
               </tbody>
             </table>
           </div>
