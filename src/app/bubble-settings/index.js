@@ -28,6 +28,7 @@ export default class BubbleSettings extends React.Component {
     this.showModal = this.showModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.promote = this.promote.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async handleSubmit(event) {
@@ -38,12 +39,13 @@ export default class BubbleSettings extends React.Component {
 
     try {
       await db.ref('bubbles/' + this.props.bubbleId).update({
-        name: this.state.name,
+        name: this.state.bubbleName,
         pendingMembers: invitesArray
       });
     } catch (error) {
       this.setState({ writeError: error.message });
     }
+    this.props.toggle()
   }
 
   updateMembers(){
