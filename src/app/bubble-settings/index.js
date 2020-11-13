@@ -7,7 +7,7 @@ import { db } from "../services/firebase"
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt, faUserCog, faCheckCircle, faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import './bubble-settings.css';
+import styles from './bubble-settings.css';
 
 export default class BubbleSettings extends React.Component {
 
@@ -19,9 +19,13 @@ export default class BubbleSettings extends React.Component {
       writeError: null,
       invites: '',
       members: this.props.members,
-      bubbleName: this.props.name
+      bubbleName: this.props.name,
+      authUpdate: false,
+      memberToRemove: false
     };
 
+    this.renderMemberEditRows = this.renderMemberEditRows.bind(this)
+    this.showModal = this.showModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.promote = this.promote.bind(this);
   }
@@ -37,14 +41,52 @@ export default class BubbleSettings extends React.Component {
         name: this.state.name,
         pendingMembers: invitesArray
       });
-      this.setState({ bubbles: '' });
     } catch (error) {
       this.setState({ writeError: error.message });
     }
   }
 
+  updateMembers(){
+    db.ref("/bubbles/" + this.props.bubbleId).on("value", snapshot => {
+      var members = (snapshot.val() && snapshot.val().members) || null;
+      this.setState ({
+        members: members
+      });
+    });
+  }
+
   promote(memberId) {
-    console.log("admin", memberId)
+    try {
+      db.ref('users/' + memberId).update({
+        admin: true
+      });
+      db.ref('bubbles/' + this.props.bubbleId + '/members/' + memberId).update({
+        admin: true
+      });
+      this.updateMembers();
+    } catch (error) {
+      console.log('error')
+    }
+  }
+
+  remove(memberId) {
+    try {
+      db.ref('users/' + memberId).update({
+        bubble: false
+      });
+      db.ref('bubbles/' + this.props.bubbleId + '/members/' + memberId).remove();
+      this.updateMembers();
+    } catch (error) {
+      console.log('error')
+    }
+    this.showModal();
+  }
+
+  showModal(member){
+    this.setState({
+      showModal: !this.state.showModal,
+      memberToRemove: member
+    })
   }
 
   handleChange(event) {
@@ -53,37 +95,52 @@ export default class BubbleSettings extends React.Component {
     });
   }
 
+  modal(member){
+    return (
+      <div className="modalWrapper">
+        <div className="modal">
+          <h3>Are you sure you want to remove this user from the bubble?</h3>
+          <p>Removed members must be reinvited in order
+          to rejoin. Removing a member removes all their
+          previously shared data from the bubble.</p>
+          <div>
+            <Button onClick={()=>this.showModal()}>Nevermind</Button>
+            <Button onClick={()=>this.remove(member)}>Yes, remove</Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  renderMemberEditRows(members, promote, showModal){
+    return (
+      <>
+        { this.state.showModal &&
+          this.modal(this.state.memberToRemove)
+        }
+        {Object.entries(members).map(member =>
+          <tr key={member[1].name}>
+            <td>{member[1].name}</td>
+            <td>
+              { member[1].admin &&
+                <><FontAwesomeIcon icon={faUserCog} /> Admin</>
+              }
+              { !member[1].admin &&
+                <button onClick={(e) => promote(member[0])}>
+                  <FontAwesomeIcon icon={faUserPlus} /> <span>Promote to admin</span>
+                </button>
+              }
+            </td>
+            <td><button onClick={(e) => showModal(member[0])}>
+              <FontAwesomeIcon icon={faSignOutAlt} /> <span>Remove from bubble</span>
+            </button></td>
+          </tr>
+        )}
+      </>
+    )
+  }
+
   render() {
-
-    function promoteToAdmin(memberId) {
-      return(
-        <button onClick={(e) => this.promote()}>
-          <FontAwesomeIcon icon={faUserPlus} /> <span>Promote to admin</span>
-        </button>
-      )
-    }
-
-    function renderMemberEditRows(members, promote){
-      return (
-        <>
-          {Object.entries(members).map(member =>
-            <tr key={member[1].name}>
-              {console.log(member[0])}
-              <td>{member[1].name}</td>
-              <td>
-                { member[1].admin &&
-                  <><FontAwesomeIcon icon={faUserCog} /> Admin</>
-                }
-                { !member[1].admin &&
-                  promote(member[0])
-                }
-              </td>
-              <td><button><FontAwesomeIcon icon={faSignOutAlt} /> <span>Remove from bubble</span></button></td>
-            </tr>
-          )}
-        </>
-      )
-    }
 
     return (
       <div className="overlayBackground">
@@ -100,13 +157,10 @@ export default class BubbleSettings extends React.Component {
             promoting members to admin and removing members.
             Once a member is promoted to admin, they cannot be demoted. There is no
             limit to the number of admin users in a bubble.</p>
-            <p>Removed members must be reinvited and reapproved in order
-            to rejoin. Removing a member removes all their
-            previously shared data from the bubble.</p>
 
             <table>
               <tbody>
-              {renderMemberEditRows(this.state.members, this.promote)}
+              {this.renderMemberEditRows(this.state.members, this.promote, this.showModal)}
               </tbody>
             </table>
           </div>
