@@ -44,6 +44,10 @@ export default class UserSettings extends React.Component {
     }
   }
 
+  sendResetPWEmail() {
+
+  }
+
   updateName(event) {
     this.setState({ bubbleName: event.target.value });
   }
@@ -73,20 +77,14 @@ export default class UserSettings extends React.Component {
 
             <h3>Change Password</h3>
 
-            <p>Enter your old password:</p>
-            <input onChange={this.oldPassword} type="text"
-            id="oldPW" name="oldPW"/>
-
-            <p>Choose a new password:</p>
-            <input onChange={this.newPassword} type="text"
-            id="newPW" name="newPW"/>
-
-            <p>Confirm your new password:</p>
-            <input onChange={this.checkPassword} type="text"
-            id="checkPW" name="checkPW"/>
+            <p>Clicking the button below will send a password reset email to the
+            account you have connected to this account:</p><br/>
+            <Button onClick={()=>this.sendResetPWEmail()}>Send Reset Email</Button>
+<br/><br/>
 
             <h3>Check-in Reminders</h3>
             <p>Send me a check-in reminder email:</p>
+
 
             <div className="reminderRadio">
               <div>

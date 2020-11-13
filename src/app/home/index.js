@@ -34,7 +34,6 @@ export default class Home extends React.Component {
       bubbleSetupVisible: false,
 
       user: auth().currentUser,
-      name: '',
       lastCheckIn: 'never',
       admin: false,
       bubble: false,
@@ -242,12 +241,13 @@ export default class Home extends React.Component {
                 </Button>
               </div>
             </div>
-            { this.state.bubble &&
-            <Bubble
-              bubbleID={this.state.bubble}
-              admin={this.state.admin}
-              toggle={this.toggleBubbleSettingsVisibility}
-            /> }
+            { this.state.name &&
+              <Bubble
+                bubbleID={this.state.bubble}
+                admin={this.state.admin}
+                toggle={this.toggleBubbleSettingsVisibility}
+              />
+            }
           </div>
         </div>
         }

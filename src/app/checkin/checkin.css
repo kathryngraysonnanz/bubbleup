@@ -99,7 +99,7 @@ form > div:first-child {
   font-size: 0.9rem;
 }
 
-form button {
+form button:last-child {
   float: right;
   margin-bottom: 30px;
 }
