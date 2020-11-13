@@ -9,9 +9,18 @@
   font-size: 1.1rem;
   cursor: pointer;
   color: #253040;
+
+  transition: .25s ease;
 }
 
-/* TO-DO: Hover state */
+.prettyButton:hover,
+.prettyButton:active {
+  background-color: #73A58C;
+
+  -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
+}
+
 
 @media (max-width: 500px){
   .prettyButton {
