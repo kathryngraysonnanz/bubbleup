@@ -13,18 +13,47 @@ export default class UserSettings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.updateName = this.updateName.bind(this);
     this.state = {
       user: auth().currentUser,
       readError: null,
       writeError: null,
 
-      username: '',
-      emailAddress: '',
-      reminders: '',
+      email: '',
+      password: '',
+      reAuth: false,
+
+      username: false,
+      newEmail: false,
+      reminders: false,
       deleteAccount: false,
 
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.reAuth = this.reAuth.bind(this);
+    this.updateEmail = this.updateEmail.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
+  }
+
+  reAuth(event) {
+    event.preventDefault();
+    this.setState({ reAuth: true })
+  }
+
+  updateEmail(newEmail){
+    firebase.auth()
+    .signInWithEmailAndPassword(this.state.email, this.state.password)
+    .then(function(userCredential) {
+        userCredential.user.updateEmail(newEmail)
+    })
+  }
+
+  deleteAccount(){
+    firebase.auth()
+    .signInWithEmailAndPassword(this.state.email, this.state.password)
+    .then(function(userCredential) {
+        userCredential.user.delete()
+    })
   }
 
   async handleSubmit(event) {
@@ -33,28 +62,54 @@ export default class UserSettings extends React.Component {
 
     var user = firebase.auth().currentUser;
 
-    user.updateEmail(this.state.emailAddress).then(function() {
-    }).catch(function(error) {
-      this.setState({ writeError: error.message });
-    });
-
     try {
-      await db.ref("bubbles").push({
-        bubbles: this.state.names,
-        timestamp: Date.now()
-      });
-      this.setState({ bubbles: '' });
+
+      if (this.state.username) {
+        db.ref('users/' + user.uid ).update({
+          username: this.state.username
+        });
+      }
+
+      if (this.state.reminders) {
+        db.ref('users/' + user.uid ).update({
+          reminders: this.state.reminders
+        });
+      }
+
+      if (this.state.newEmail) {
+        this.updateEmail(this.state.newEmail);
+        db.ref('users/' + user.uid ).update({
+          email: this.state.newEmail
+        });
+      }
+
+      if (this.state.deleteAccount != false) {
+        if (this.state.deleteAccount.toUpperCase() === "DELETE") {
+          this.deleteAccount();
+          db.ref('users/' + user.uid ).remove();
+        } else {
+          console.log("doesn't match")
+        }
+      } else {
+        console.log("nope")
+      }
+
     } catch (error) {
       this.setState({ writeError: error.message });
+      console.log("error!")
     }
+
+
   }
 
   sendResetPWEmail() {
 
   }
 
-  updateName(event) {
-    this.setState({ bubbleName: event.target.value });
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   }
 
   render() {
@@ -65,6 +120,39 @@ export default class UserSettings extends React.Component {
             <h1><b>User</b> Settings</h1>
             <button onClick={()=>this.props.toggle()}><h1>X</h1></button>
           </div>
+
+          <>
+          { !this.state.reAuth &&
+            <div>
+              <p>Please confirm your login before updating your user settings.</p>
+              <form onSubmit={this.reAuth}>
+                <div>
+                  <input
+                    placeholder="Email"
+                    name="email"
+                    type="email"
+                    onChange={this.handleChange}
+                    value={this.state.email}
+                  />
+                </div>
+                <div>
+                  <input
+                    placeholder="Password"
+                    name="password"
+                    onChange={this.handleChange}
+                    value={this.state.password}
+                    type="password"
+                  />
+                </div>
+                <div>
+                  <Button type="submit">Continue</Button>
+                </div>
+              </form>
+            </div>
+          }
+          </>
+          <>
+          { this.state.reAuth &&
           <form onSubmit={this.handleSubmit}>
             <h3>Change Username</h3>
             <p>Your username is how you’ll be identified to other members in your
@@ -72,13 +160,13 @@ export default class UserSettings extends React.Component {
             it should be something your friends will recognize. We
             recommend a first name, nickname, or initials. </p>
 
-            <input onChange={this.updateUsername} type="text" maxLength="60"
+            <input onChange={this.handleChange} type="text" maxLength="60"
             id="username" name="username"/>
 
             <h3>Change Email Address</h3>
 
-            <input onChange={this.updateEmail} type="text"
-            id="email" name="email"/>
+            <input onChange={this.handleChange} type="text"
+            id="newEmail" name="newEmail"/>
 
             <h3>Change Password</h3>
 
@@ -124,12 +212,13 @@ export default class UserSettings extends React.Component {
             previously shared in a bubble will be removed. <b>Deleting your account
             is final, and deleted accounts cannot be recovered. </b></p>
             <p className="deleteConfirm">Type "DELETE" to confirm you want to delete your account:</p>
-            <input onChange={this.deleteAccount} type="text"
-            id="delete" name="delete"/>
-
+            <input onChange={this.handleChange} type="text"
+            id="deleteAccount" name="deleteAccount"/>
 
             <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
           </form>
+          }
+          </>
         </div>
       </div>
     );
