@@ -6,7 +6,7 @@ import { db } from "../services/firebase"
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt, faUserCog, faCheckCircle, faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import styles from './bubble-settings.css';
+import './bubble-settings.css';
 
 export default class BubbleSettings extends React.Component {
 
