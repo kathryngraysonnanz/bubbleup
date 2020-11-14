@@ -73,6 +73,9 @@
   margin-bottom: 15px;
 }
 
+.noBubble h3 {
+  color: #253040;
+}
 
 .bubbleInfo {
   position: sticky;
