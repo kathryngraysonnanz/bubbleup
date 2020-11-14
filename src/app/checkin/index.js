@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import Reac from "react";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -138,7 +138,7 @@ export default class Checkin extends React.Component {
   }
 
   setTested(event){
-    if (event.target.checked == true) {
+    if (event.target.checked === true) {
       this.setState({tested: true})
     } else {
       this.setState({tested: false})
@@ -147,7 +147,7 @@ export default class Checkin extends React.Component {
   }
 
   setSocialized(event){
-    if (event.target.checked == true) {
+    if (event.target.checked === true) {
       this.setState({socialized: true})
     } else {
       this.setState({socialized: false})
@@ -158,7 +158,7 @@ export default class Checkin extends React.Component {
   }
 
   setTravel(event){
-    if (event.target.checked == true) {
+    if (event.target.checked === true) {
       this.setState({travel: true})
     } else {
       this.setState({travel: false})
@@ -167,7 +167,7 @@ export default class Checkin extends React.Component {
   }
 
   setQuarantine(event){
-    if (event.target.checked == true) {
+    if (event.target.checked === true) {
       this.setState({quarantining: true})
     } else {
       this.setState({quarantining: false})

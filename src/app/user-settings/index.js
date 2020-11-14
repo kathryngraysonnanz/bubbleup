@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -6,7 +6,7 @@ import { db } from "../services/firebase"
 
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUserCog, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import './user-settings.css';
 
 export default class UserSettings extends React.Component {
@@ -83,7 +83,7 @@ export default class UserSettings extends React.Component {
         });
       }
 
-      if (this.state.deleteAccount != false) {
+      if (this.state.deleteAccount !== false) {
         if (this.state.deleteAccount.toUpperCase() === "DELETE") {
           this.deleteAccount();
           db.ref('users/' + user.uid ).remove();

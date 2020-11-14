@@ -1,7 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
 
-import firebase from 'firebase/app'
-import { auth } from "../services/firebase";
 import { db } from "../services/firebase"
 
 import Button from '../components/button'
@@ -10,7 +8,7 @@ import BubbleSettings from '../bubble-settings'
 import BubbleSetup from '../bubble-setup'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog, faUserCircle, faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import './bubble.css'
 

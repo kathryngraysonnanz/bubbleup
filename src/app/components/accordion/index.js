@@ -28,7 +28,7 @@ function Accordion(props) {
         <div className="name">
           <Chevron className={`${setRotate}`} width={8} fill={"#777"} />
           <p className="accordionTitle">{props.title}</p>
-          { props.isQuarantining == true &&
+          { props.isQuarantining === true &&
             <div className="quarantineAlert">
               <p>Quarantined</p>
               <FontAwesomeIcon icon={faHouseUser} />

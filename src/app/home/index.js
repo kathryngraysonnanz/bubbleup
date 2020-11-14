@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -8,11 +8,11 @@ import Checkin from '../checkin'
 import UserSettings from '../user-settings'
 import Bubble from '../bubble'
 
-import { signup, signin, signout } from '../helpers/auth';
+import { signup, signin } from '../helpers/auth';
 
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog, faUserCircle, faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import './home.css';
 
 export default class Home extends React.Component {

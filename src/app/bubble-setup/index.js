@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -6,7 +6,7 @@ import { db } from "../services/firebase"
 
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUserCog, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import './bubble-setup.css';
 
 export default class BubbleSetup extends React.Component {
