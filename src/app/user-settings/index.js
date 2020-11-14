@@ -98,12 +98,14 @@ export default class UserSettings extends React.Component {
       this.setState({ writeError: error.message });
       console.log("error!")
     }
-
-
   }
 
-  sendResetPWEmail() {
-
+  sendResetPWEmail(email) {
+    firebase.auth().sendPasswordResetEmail(email).then(function() {
+      // Email sent.
+    }).catch(function(error) {
+      // An error happened.
+    });
   }
 
   handleChange(event) {
@@ -173,7 +175,7 @@ export default class UserSettings extends React.Component {
             <p>Clicking the button below will send a password reset email to the
             address you have connected to this account. If you are also changing
             your email address, change & save that first.</p><br/>
-            <Button onClick={()=>this.sendResetPWEmail()}>Send Reset Email</Button>
+            <Button onClick={()=>this.sendResetPWEmail(this.state.email)}>Send Reset Email</Button>
 <br/><br/>
 
             <h3>Check-in Reminders</h3>
