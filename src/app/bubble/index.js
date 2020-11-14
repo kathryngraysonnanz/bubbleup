@@ -65,7 +65,6 @@ export default class Bubble extends React.Component {
               { member[1].checkin &&
                 <Accordion
                   title={member[1].name}
-                  isQuarantining={member[1].checkin.quarantining[0]}
                   lastCheckIn={member[1].lastCheckIn}
                   content={
                     <>
