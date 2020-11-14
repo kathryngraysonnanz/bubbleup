@@ -125,7 +125,7 @@ export default class UserSettings extends React.Component {
 
           <>
           { !this.state.reAuth &&
-            <div>
+            <div className="reAuth">
               <p>Please confirm your login before updating your user settings.</p>
               <form onSubmit={this.reAuth}>
                 <div>
