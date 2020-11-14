@@ -7,6 +7,7 @@ import { db } from "../services/firebase"
 import Button from '../components/button'
 import Accordion from '../components/accordion'
 import BubbleSettings from '../bubble-settings'
+import BubbleSetup from '../bubble-setup'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog, faUserCircle, faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons'
@@ -23,13 +24,19 @@ export default class Bubble extends React.Component {
       admin: this.props.admin,
 
       bubbleSettingsVisible: false,
+      bubbleSetupVisible: false,
     }
-    this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this)
+    this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this);
+    this.toggleBubbleSetupVisibility = this.toggleBubbleSetupVisibility.bind(this);
   }
 
 
   toggleBubbleSettingsVisibility() {
     this.setState({ bubbleSettingsVisible: !this.state.bubbleSettingsVisible });
+  }
+
+  toggleBubbleSetupVisibility() {
+    this.setState({ bubbleSetupVisible: !this.state.bubbleSetupVisible });
   }
 
   componentDidMount(){
@@ -200,6 +207,9 @@ export default class Bubble extends React.Component {
             bubbleId={this.props.bubbleID}
           />
         }
+        { this.state.bubbleSetupVisible &&
+          <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/>
+        }
         { this.props.bubbleID &&
           <>
           <div className="bubbleInfo">
@@ -222,7 +232,7 @@ export default class Bubble extends React.Component {
             non-discoverable. You must be invited by a member in order
             to join an existing bubble.
            </p>
-            <Button onClick={(e)=>this.toggleBubbleSettingsVisibility()}><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
+            <Button onClick={(e)=>this.toggleBubbleSetupVisibility()}><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
           </div>
         }
       </div>

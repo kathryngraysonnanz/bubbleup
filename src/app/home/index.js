@@ -6,7 +6,6 @@ import { db } from "../services/firebase"
 
 import Checkin from '../checkin'
 import UserSettings from '../user-settings'
-import BubbleSetup from '../bubble-setup'
 import Bubble from '../bubble'
 
 import { signup, signin, signout } from '../helpers/auth';
@@ -31,7 +30,6 @@ export default class Home extends React.Component {
 
       checkinVisible: false,
       userSettingsVisible: false,
-      bubbleSetupVisible: false,
 
       user: auth().currentUser,
       lastCheckIn: 'never',
@@ -47,7 +45,6 @@ export default class Home extends React.Component {
     this.handleSignUp = this.handleSignUp.bind(this);
 
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
-    this.toggleBubbleSetupVisibility = this.toggleBubbleSetupVisibility.bind(this);
     this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
 
@@ -139,10 +136,6 @@ export default class Home extends React.Component {
     this.setState({ userSettingsVisible: !this.state.userSettingsVisible });
   }
 
-  toggleBubbleSetupVisibility() {
-    this.setState({ bubbleSetupVisible: !this.state.bubbleSetupVisible });
-  }
-
 
   render() {
 
@@ -225,7 +218,7 @@ export default class Home extends React.Component {
             />
           }
           { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
-          { this.state.bubbleSetupVisible && <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/> }
+
           <div className="contentWrapper">
             <div className="welcome">
               <h1>Welcome back, <b>{this.state.name}</b>&nbsp;
