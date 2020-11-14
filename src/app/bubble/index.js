@@ -222,7 +222,7 @@ export default class Bubble extends React.Component {
             non-discoverable. You must be invited by a member in order
             to join an existing bubble.
            </p>
-            <Button onClick={(e)=>this.toggleBubbleSetupVisibility()}><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
+            <Button onClick={(e)=>this.toggleBubbleSettingsVisibility()}><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
           </div>
         }
       </div>

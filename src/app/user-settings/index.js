@@ -20,9 +20,6 @@ export default class UserSettings extends React.Component {
       writeError: null,
 
       username: '',
-      oldPassword: '',
-      newPassword: '',
-      confirmPassword: '',
       emailAddress: '',
       reminders: '',
       deleteAccount: false,
@@ -33,6 +30,14 @@ export default class UserSettings extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
     this.setState({ writeError: null });
+
+    var user = firebase.auth().currentUser;
+
+    user.updateEmail(this.state.emailAddress).then(function() {
+    }).catch(function(error) {
+      this.setState({ writeError: error.message });
+    });
+
     try {
       await db.ref("bubbles").push({
         bubbles: this.state.names,
@@ -78,7 +83,8 @@ export default class UserSettings extends React.Component {
             <h3>Change Password</h3>
 
             <p>Clicking the button below will send a password reset email to the
-            account you have connected to this account:</p><br/>
+            address you have connected to this account. If you are also changing
+            your email address, change & save that first.</p><br/>
             <Button onClick={()=>this.sendResetPWEmail()}>Send Reset Email</Button>
 <br/><br/>
 
