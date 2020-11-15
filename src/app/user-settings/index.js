@@ -61,6 +61,7 @@ export default class UserSettings extends React.Component {
     this.setState({ writeError: null });
 
     var user = firebase.auth().currentUser;
+    var bubbleID = this.props.bubbleID
 
     try {
 
@@ -88,11 +89,23 @@ export default class UserSettings extends React.Component {
           this.deleteAccount();
           db.ref('users/' + user.uid ).remove();
         } else {
-          console.log("doesn't match")
+          console.log("DELETE doesn't match")
         }
       } else {
-        console.log("nope")
+        console.log("DELETE is false")
       }
+
+      if (this.state.leaveBubble !== false) {
+        if (this.state.leaveBubble.toUpperCase() === "LEAVE") {
+          db.ref('bubbles/' + bubbleID + '/members/' + user.uid ).remove();
+          db.ref('users/' + user.uid + '/bubble').remove();
+        } else {
+          console.log("LEAVE doesn't match")
+        }
+      } else {
+        console.log("LEAVE is false")
+      }
+
       this.props.toggle();
 
     } catch (error) {
@@ -179,6 +192,8 @@ export default class UserSettings extends React.Component {
             <Button onClick={()=>this.sendResetPWEmail(this.state.email)}>Send Reset Email</Button>
 <br/><br/>
 
+            {/* TODO: Re-enable when reminders are ready
+
             <h3>Check-in Reminders</h3>
             <p>Send me a check-in reminder email:</p>
 
@@ -209,10 +224,22 @@ export default class UserSettings extends React.Component {
               </div>
             </div>
 
+            */}
+
+            <h3>Leave my bubble</h3>
+            <p>This will remove you from the bubble in which you are currently a
+            member. You will no longer appear as a member, and any data that was
+            previously shared with the bubble will be removed. <b>Once you leave a
+            bubble, you must be re-invited in order to re-join.</b></p>
+            <p className="leaveConfirm">Type "LEAVE" to confirm you want to
+            leave your current bubble:</p>
+            <input onChange={this.handleChange} type="text"
+            id="leaveBubble" name="leaveBubble"/>
+
             <h3>Delete My Account</h3>
             <p>This will delete your account and erase all your data. You will
-            no longer appear as a member in any bubbles, and any data that was
-            previously shared in a bubble will be removed. <b>Deleting your account
+            no longer appear as a member in your bubble, and any data that was
+            previously shared with the bubble will be removed. <b>Deleting your account
             is final, and deleted accounts cannot be recovered. </b></p>
             <p className="deleteConfirm">Type "DELETE" to confirm you want to delete your account:</p>
             <input onChange={this.handleChange} type="text"

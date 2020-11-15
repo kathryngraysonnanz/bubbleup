@@ -236,6 +236,7 @@ export default class Home extends React.Component {
           }
           { this.state.userSettingsVisible &&
             <UserSettings
+            bubbleID={this.state.bubble}
             toggle={this.toggleUserSettingsVisibility}/>
           }
 
