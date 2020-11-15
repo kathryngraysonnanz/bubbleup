@@ -93,6 +93,7 @@ export default class UserSettings extends React.Component {
       } else {
         console.log("nope")
       }
+      this.props.toggle();
 
     } catch (error) {
       this.setState({ writeError: error.message });

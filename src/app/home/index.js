@@ -234,7 +234,10 @@ export default class Home extends React.Component {
               name={this.state.name}
             />
           }
-          { this.state.userSettingsVisible && <UserSettings toggle={this.toggleUserSettingsVisibility}/> }
+          { this.state.userSettingsVisible &&
+            <UserSettings
+            toggle={this.toggleUserSettingsVisibility}/>
+          }
 
           <div className="contentWrapper">
             <div className="welcome">
