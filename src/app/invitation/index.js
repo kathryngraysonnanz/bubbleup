@@ -1,19 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-import firebase from 'firebase/app'
-import { auth } from "../services/firebase";
 import { db } from "../services/firebase"
 
-import Checkin from '../checkin'
-import UserSettings from '../user-settings'
-import Bubble from '../bubble'
-
-import { signup, signin } from '../helpers/auth';
-
 import Button from '../components/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import './invitation.css';
 
 export default class Invite extends React.Component {
@@ -53,7 +43,7 @@ export default class Invite extends React.Component {
               <>
                 <h3>You've been invited to join the bubble: <b>{this.state.name}</b></h3>
                 <p><b>NOTE:</b> You cannot be in two bubbles at once. Clicking
-                "Join" will be remove you from your current bubble and 
+                "Join" will be remove you from your current bubble and
                 add you to this new bubble.</p>
                 <div>
                   <Link to="/">Decline invitation</Link>

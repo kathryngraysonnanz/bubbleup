@@ -36,7 +36,6 @@ export default class BubbleSetup extends React.Component {
   };
 
   writeBubbleData(bubbleName, bubbleUUID, invites) {
-    var invitesArray = invites.split(',');
     let user = firebase.auth().currentUser.uid
 
     db.ref('bubbles/' + bubbleUUID).set({
@@ -86,11 +85,6 @@ export default class BubbleSetup extends React.Component {
   }
 
   render() {
-
-    function copyLink(){
-      document.querySelector("inviteURL").select();
-      document.execCommand('copy');
-    }
 
     // TODO: Replace localhost
 

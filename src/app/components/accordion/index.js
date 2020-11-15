@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Chevron from "./Chevron";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarCheck, faHouseUser } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 
 import "./accordion.css";
 

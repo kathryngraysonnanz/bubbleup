@@ -42,8 +42,6 @@ export default class BubbleSettings extends React.Component {
     event.preventDefault();
     this.setState({ writeError: null });
 
-    var invitesArray = this.state.invites.split(',');
-
     try {
       await db.ref('bubbles/' + this.props.bubbleId).update({
         name: this.state.bubbleName
@@ -149,11 +147,6 @@ export default class BubbleSettings extends React.Component {
   }
 
   render() {
-
-    function copyLink(){
-      document.querySelector("inviteURL").select();
-      document.execCommand('copy');
-    }
 
     let inviteURL = "http://localhost:3000/"+this.props.bubbleId
 
