@@ -1,0 +1,27 @@
+.inviteCallout {
+  max-width: 400px;
+  margin: 10px auto 0;
+  border: 1px solid #3D405B;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #3D405B;
+  -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.1);
+}
+
+.inviteCallout > div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px 0 10px;
+}
+
+.inviteCallout > div * {
+  margin: 0;
+}
+
+.inviteCallout h3, .inviteCallout a {
+  font-weight: normal;
+  color: white;
+  margin: 0;
+}

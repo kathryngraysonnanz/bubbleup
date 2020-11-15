@@ -49,6 +49,8 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
+    let bubbleID = this.props.match.params.bubbleName;
+
     auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
@@ -56,10 +58,13 @@ export default class Home extends React.Component {
           loading: false,
         });
 
+        // TODO: Write "if / then" flow for users who are already in one bubble
+        // and get invited to a second one.
+
         try {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
-            let bubble = (snapshot.val() && snapshot.val().bubble) || false;
+            let bubble = (snapshot.val() && snapshot.val().bubble) || bubbleID;
             var admin = (snapshot.val() && snapshot.val().admin) || false;
             var lastCheckIn = (snapshot.val() && snapshot.val().lastCheckIn) || 'never';
             this.setState ({
