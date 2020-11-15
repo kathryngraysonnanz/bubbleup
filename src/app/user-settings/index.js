@@ -69,6 +69,9 @@ export default class UserSettings extends React.Component {
         db.ref('users/' + user.uid ).update({
           username: this.state.username
         });
+        db.ref('bubbles/' + bubbleID + '/members/' + user.uid ).update({
+          name: this.state.username
+        });
       }
 
       if (this.state.reminders) {
@@ -105,13 +108,12 @@ export default class UserSettings extends React.Component {
       } else {
         console.log("LEAVE is false")
       }
-
-      this.props.toggle();
-
     } catch (error) {
       this.setState({ writeError: error.message });
       console.log("error!")
     }
+
+    this.props.toggle();
   }
 
   sendResetPWEmail(email) {
