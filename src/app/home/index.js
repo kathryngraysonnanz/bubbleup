@@ -49,7 +49,7 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    let bubbleID = this.props.match.params.bubbleName;
+    let bubbleID = this.props.match.params.bubbleID;
 
     auth().onAuthStateChanged((user) => {
       if (user) {
@@ -74,6 +74,12 @@ export default class Home extends React.Component {
               lastCheckIn: lastCheckIn
             })
           });
+
+          if (bubbleID) {
+            firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+              bubble: bubbleID
+            });
+          }
         } catch (error) {
           this.setState({ readError: error.message });
         }
@@ -241,6 +247,7 @@ export default class Home extends React.Component {
             </div>
             { this.state.name &&
               <Bubble
+                userID={firebase.auth().currentUser.uid}
                 bubbleID={this.state.bubble}
                 admin={this.state.admin}
                 toggle={this.toggleBubbleSettingsVisibility}

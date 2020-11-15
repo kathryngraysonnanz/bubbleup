@@ -27,13 +27,12 @@ function Accordion(props) {
       <button className={`accordion ${setActive}`} onClick={toggleAccordion}>
         <div className="name">
           <Chevron className={`${setRotate}`} width={8} fill={"#777"} />
-          <p className="accordionTitle">{props.title}</p>
-          { props.isQuarantining === true &&
-            <div className="quarantineAlert">
-              <p>Quarantined</p>
-              <FontAwesomeIcon icon={faHouseUser} />
-            </div>
-          }
+          <p className="accordionTitle">{props.title}
+              { props.userID === props.memberID &&
+                <span> (You)</span>
+              }
+          </p>
+
         </div>
         <div>
           <p>Last check-in:</p>
