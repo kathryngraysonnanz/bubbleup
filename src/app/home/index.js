@@ -49,7 +49,11 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    let bubbleID = this.props.match.params.bubbleID;
+
+    let bubbleID = false
+    if (this.props.match) {
+      bubbleID = this.props.match.params.bubbleID;
+    }
 
     auth().onAuthStateChanged((user) => {
       if (user) {
@@ -57,9 +61,6 @@ export default class Home extends React.Component {
           authenticated: true,
           loading: false,
         });
-
-        // TODO: Write "if / then" flow for users who are already in one bubble
-        // and get invited to a second one.
 
         try {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {

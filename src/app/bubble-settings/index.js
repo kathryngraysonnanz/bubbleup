@@ -143,6 +143,8 @@ export default class BubbleSettings extends React.Component {
 
   render() {
 
+    let inviteURL = "http://localhost:3000/"+this.props.bubbleId
+
     return (
       <div className="overlayBackground">
         <div className="contentWrapper bubbleSettings">
@@ -177,11 +179,13 @@ export default class BubbleSettings extends React.Component {
             <h3>Invite Members</h3>
             <p>Your bubble should be a small, tight-knit group of people that all
             interact regularly. All members of the bubble will be able
-            to see each others' check-in information. <b>You can leave this blank
-            for now and add members from the Bubble Settings page later.</b></p>
-            <p>Add emails for each person you'd like to invite, separating each
-            email address with a comma.</p>
-            <textarea id="invites" name="invites" onChange={this.handleChange}></textarea>
+            to see each others' check-in information.</p>
+            <p>This is your bubble's secret link! <b>Anyone with this link can
+            join your bubble</b>, so don't share it on any public forums or social
+            media sites! Give it directly to the people you want to invite.</p>
+            <textarea id="invites" name="invites">
+              {inviteURL}
+            </textarea>
 
             <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
           </form>

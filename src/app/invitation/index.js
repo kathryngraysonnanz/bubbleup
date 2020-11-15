@@ -56,7 +56,7 @@ export default class Invite extends React.Component {
                 already part of a bubble, clicking "Join" will
                 remove you from your current bubble and add you to this one.</p>
                 <div>
-                  <Link to="/home">Decline invitation</Link>
+                  <Link to="/">Decline invitation</Link>
                   <Link to={"/home/"+this.state.bubbleID}><Button>Join</Button></Link>
                 </div>
               </>
