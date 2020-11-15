@@ -96,3 +96,26 @@ input[type=text] {
   margin-top: 20px;
   color: white;
 }
+
+.inviteURLWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inviteURLWrapper textarea {
+  max-width: 70%;
+}
+
+.inviteURLWrapper button {
+  margin-bottom: 0 !important;
+}
+
+#inviteURL {
+  min-height: 50px;
+  margin: 10px;
+}
+
+.copyButton {
+  float: left;
+}

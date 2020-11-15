@@ -39,7 +39,6 @@ export default class Bubble extends React.Component {
 
   componentDidMount(){
     try {
-      console.log(this.props.bubbleID)
       db.ref("/bubbles/" + this.props.bubbleID).on("value", snapshot => {
         var members = (snapshot.val() && snapshot.val().members) || null;
         var name = (snapshot.val() && snapshot.val().name) || null;
@@ -55,7 +54,7 @@ export default class Bubble extends React.Component {
 
   render() {
 
-    function mapOverMembers(members){
+    function mapOverMembers(members, userID){
       return (
         <>
           {Object.entries(members).map(member =>
@@ -66,10 +65,11 @@ export default class Bubble extends React.Component {
               { member[1].checkin &&
                 <Accordion
                   title={member[1].name}
+                  userID={userID}
+                  memberID={member[0]}
                   lastCheckIn={member[1].lastCheckIn}
                   content={
                     <>
-
                       { member[1].checkin.status[0] &&
                         <div className="status">
                           <p>Status:</p>
@@ -208,20 +208,22 @@ export default class Bubble extends React.Component {
           />
         }
         { this.state.bubbleSetupVisible &&
-          <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/>
+          <BubbleSetup toggle={this.toggleBubbleSetupVisibility} username={this.props.username}/>
         }
         { this.props.bubbleID &&
           <>
           <div className="bubbleInfo">
             <div className="bubbleName">
               <h2>{this.state.name}</h2>
-              <button onClick={(e) => this.toggleBubbleSettingsVisibility()}>
-                <h2>{ this.state.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
-              </button>
+              { this.state.admin &&
+                <button onClick={(e) => this.toggleBubbleSettingsVisibility()}>
+                  <h2>{ this.state.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
+                </button>
+              }
             </div>
           </div>
           <div className="members">
-            {this.state.members && mapOverMembers(this.state.members)}
+            {this.state.members && mapOverMembers(this.state.members, this.props.userID)}
           </div>
           </>
         }

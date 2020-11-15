@@ -6,16 +6,18 @@ import {
   Link
 } from "react-router-dom";
 import Home from '../home'
+import Invite from '../invitation'
 
 export default function App() {
   return (
     <Router>
         <Switch>
-          <Route path="/home">
-            <Home />
-          </Route>
+          <Route path="/home/:bubbleID"
+            component={Home} />
+          <Route path="/:bubbleID"
+            component={Invite} />
           <Route path="/">
-            <div>add '/home' to the URL</div>
+            <Home/>
           </Route>
         </Switch>
     </Router>

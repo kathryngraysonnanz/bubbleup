@@ -49,6 +49,12 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
+
+    let bubbleID = false
+    if (this.props.match) {
+      bubbleID = this.props.match.params.bubbleID;
+    }
+
     auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
@@ -59,7 +65,7 @@ export default class Home extends React.Component {
         try {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
-            let bubble = (snapshot.val() && snapshot.val().bubble) || false;
+            let bubble = (snapshot.val() && snapshot.val().bubble) || bubbleID;
             var admin = (snapshot.val() && snapshot.val().admin) || false;
             var lastCheckIn = (snapshot.val() && snapshot.val().lastCheckIn) || 'never';
             this.setState ({
@@ -69,6 +75,17 @@ export default class Home extends React.Component {
               lastCheckIn: lastCheckIn
             })
           });
+
+          if (bubbleID) {
+            firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+              bubble: bubbleID,
+              admin: false
+            });
+
+            firebase.database().ref('bubbles/' + bubbleID + '/members/' + firebase.auth().currentUser.uid).update({
+              name: this.state.name
+            });
+          }
         } catch (error) {
           this.setState({ readError: error.message });
         }
@@ -236,6 +253,8 @@ export default class Home extends React.Component {
             </div>
             { this.state.name &&
               <Bubble
+                userID={firebase.auth().currentUser.uid}
+                username={this.state.username}
                 bubbleID={this.state.bubble}
                 admin={this.state.admin}
                 toggle={this.toggleBubbleSettingsVisibility}
