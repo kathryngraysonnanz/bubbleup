@@ -30,6 +30,14 @@ export default class BubbleSettings extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  copyToClipboard = (e) => {
+    e.preventDefault();
+    this.textArea.select();
+    document.execCommand('copy');
+    e.target.focus();
+    this.setState({ copySuccess: true });
+  };
+
   async handleSubmit(event) {
     event.preventDefault();
     this.setState({ writeError: null });
@@ -143,6 +151,11 @@ export default class BubbleSettings extends React.Component {
 
   render() {
 
+    function copyLink(){
+      document.querySelector("inviteURL").select();
+      document.execCommand('copy');
+    }
+
     let inviteURL = "http://localhost:3000/"+this.props.bubbleId
 
     return (
@@ -183,9 +196,25 @@ export default class BubbleSettings extends React.Component {
             <p>This is your bubble's secret link! <b>Anyone with this link can
             join your bubble</b>, so don't share it on any public forums or social
             media sites! Give it directly to the people you want to invite.</p>
-            <textarea id="invites" name="invites">
-              {inviteURL}
-            </textarea>
+            <div className="inviteURLWrapper">
+              <textarea
+                ref={(textarea) => this.textArea = textarea}
+                value={inviteURL}
+                id="inviteURL" name="inviteURL">
+              </textarea>
+              { document.queryCommandSupported('copy') &&
+                <div className="copyButton">
+                  <Button onClick={this.copyToClipboard}>
+                    { this.state.copySuccess &&
+                      <>Copied! <span> <FontAwesomeIcon icon={faCheckCircle}/></span></>
+                    }
+                    { !this.state.copySuccess &&
+                      <>Copy</>
+                    }
+                  </Button>
+                </div>
+              }
+            </div>
 
             <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
           </form>

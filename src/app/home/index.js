@@ -78,7 +78,8 @@ export default class Home extends React.Component {
 
           if (bubbleID) {
             firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
-              bubble: bubbleID
+              bubble: bubbleID,
+              admin: false
             });
           }
         } catch (error) {
