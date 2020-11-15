@@ -7,6 +7,7 @@ import { db } from "../services/firebase"
 import Checkin from '../checkin'
 import UserSettings from '../user-settings'
 import Bubble from '../bubble'
+import Invite from '../invitation'
 
 import { signup, signin } from '../helpers/auth';
 
@@ -22,33 +23,30 @@ export default class Home extends React.Component {
     this.state = {
       authenticated: false,
       loading: true,
-      error: null,
-      email: '',
-      password: '',
-      username: '',
       login: true,
 
       checkinVisible: false,
       userSettingsVisible: false,
+      inviteVisible: true,
 
       user: auth().currentUser,
       lastCheckIn: 'never',
       admin: false,
-      bubble: false,
-
-      readError: null,
-      writeError: null
+      bubble: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
 
+    this.toggleInviteVisibility = this.toggleInviteVisibility.bind(this);
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
 
   componentDidMount() {
+
+    // Check to see if there's a bubbleID in the URL and use that. If not, false.
 
     let bubbleID = false
     if (this.props.match) {
@@ -153,11 +151,18 @@ export default class Home extends React.Component {
     this.setState({ userSettingsVisible: !this.state.userSettingsVisible });
   }
 
+  toggleInviteVisibility() {
+    this.setState({ inviteVisible: !this.state.inviteVisible });
+  }
+
 
   render() {
 
     return (
       <>
+        { this.state.invite &&
+          <Invite/>
+        }
         { !this.state.authenticated &&
           <div className="authPage">
             <div>
