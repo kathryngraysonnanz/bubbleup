@@ -81,6 +81,10 @@ export default class Home extends React.Component {
               bubble: bubbleID,
               admin: false
             });
+
+            firebase.database().ref('bubbles/' + bubbleID + '/members/' + firebase.auth().currentUser.uid).update({
+              name: this.state.name
+            });
           }
         } catch (error) {
           this.setState({ readError: error.message });
@@ -250,6 +254,7 @@ export default class Home extends React.Component {
             { this.state.name &&
               <Bubble
                 userID={firebase.auth().currentUser.uid}
+                username={this.state.username}
                 bubbleID={this.state.bubble}
                 admin={this.state.admin}
                 toggle={this.toggleBubbleSettingsVisibility}

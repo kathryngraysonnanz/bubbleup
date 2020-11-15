@@ -46,8 +46,7 @@ export default class BubbleSettings extends React.Component {
 
     try {
       await db.ref('bubbles/' + this.props.bubbleId).update({
-        name: this.state.bubbleName,
-        pendingMembers: invitesArray
+        name: this.state.bubbleName
       });
     } catch (error) {
       this.setState({ writeError: error.message });

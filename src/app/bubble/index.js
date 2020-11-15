@@ -208,7 +208,7 @@ export default class Bubble extends React.Component {
           />
         }
         { this.state.bubbleSetupVisible &&
-          <BubbleSetup toggle={this.toggleBubbleSetupVisibility}/>
+          <BubbleSetup toggle={this.toggleBubbleSetupVisibility} username={this.props.username}/>
         }
         { this.props.bubbleID &&
           <>
