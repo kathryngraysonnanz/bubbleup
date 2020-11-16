@@ -39,6 +39,9 @@ export default class Home extends React.Component {
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
 
+    this.declineInvite = this.declineInvite.bind(this);
+    this.acceptInvite = this.acceptInvite.bind(this);
+
     this.toggleInviteVisibility = this.toggleInviteVisibility.bind(this);
     this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
     this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
@@ -46,11 +49,10 @@ export default class Home extends React.Component {
 
   componentDidMount() {
 
-    // Check to see if there's a bubbleID in the URL and use that. If not, false.
-
     let bubbleID = false
     if (this.props.match) {
       bubbleID = this.props.match.params.bubbleID;
+      this.setState ({ inviteBubble: bubbleID })
     }
 
     auth().onAuthStateChanged((user) => {
@@ -73,17 +75,6 @@ export default class Home extends React.Component {
               lastCheckIn: lastCheckIn
             })
           });
-
-          if (bubbleID) {
-            firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
-              bubble: bubbleID,
-              admin: false
-            });
-
-            firebase.database().ref('bubbles/' + bubbleID + '/members/' + firebase.auth().currentUser.uid).update({
-              name: this.state.name
-            });
-          }
         } catch (error) {
           this.setState({ readError: error.message });
         }
@@ -155,14 +146,30 @@ export default class Home extends React.Component {
     this.setState({ inviteVisible: !this.state.inviteVisible });
   }
 
+  declineInvite() {
+    this.setState({ inviteBubble: false })
+  }
+
+  acceptInvite() {
+    firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+      bubble: this.state.inviteBubble,
+      admin: false
+    });
+
+    firebase.database().ref('bubbles/' + this.state.inviteBubble + '/members/' + firebase.auth().currentUser.uid).update({
+      name: this.state.name
+    });
+
+    this.setState({
+      bubble: this.state.inviteBubble,
+      inviteBubble: false
+    })
+  }
 
   render() {
 
     return (
       <>
-        { this.state.invite &&
-          <Invite/>
-        }
         { !this.state.authenticated &&
           <div className="authPage">
             <div>
@@ -271,6 +278,12 @@ export default class Home extends React.Component {
             }
           </div>
         </div>
+        }
+        { this.state.inviteBubble &&
+          <Invite
+            bubbleID={this.state.inviteBubble}
+            declineInvite={this.declineInvite}
+            acceptInvite={this.acceptInvite}/>
         }
       </>
     );

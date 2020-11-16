@@ -16,7 +16,8 @@ export default class Invite extends React.Component {
   }
 
   componentDidMount(){
-    let bubbleID = this.props.match.params.bubbleID;
+
+    let bubbleID = this.props.bubbleID
 
     try {
       db.ref("/bubbles/" + bubbleID).on("value", snapshot => {
@@ -46,8 +47,8 @@ export default class Invite extends React.Component {
                 "Join" will be remove you from your current bubble and
                 add you to this new bubble.</p>
                 <div>
-                  <Link to="/">Decline invitation</Link>
-                  <Link to={"/home/"+this.state.bubbleID}><Button>Join</Button></Link>
+                  <Link to="/" onClick={()=>this.props.declineInvite()}>Decline invitation</Link>
+                  <Link to="/" onClick={()=>this.props.acceptInvite()}><Button>Join</Button></Link>
                 </div>
               </>
             }

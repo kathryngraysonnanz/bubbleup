@@ -11,10 +11,8 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/home/:bubbleID"
-          component={Home} />
         <Route path="/:bubbleID"
-          component={Invite} />
+          component={Home} />
         <Route path="/">
           <Home/>
         </Route>

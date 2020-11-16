@@ -22,7 +22,7 @@
 
 .inviteCallout h3, .inviteCallout a, .inviteCallout p {
   font-weight: normal;
-  color: white;
+  color: white !important;
   margin: 0;
 }
 

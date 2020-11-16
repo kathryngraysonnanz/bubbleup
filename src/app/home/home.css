@@ -72,6 +72,9 @@ h2, p {
 }
 
 .authPage {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -80,6 +83,7 @@ h2, p {
   background-image: url('https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/loginBG.png?alt=media&token=8f9ebc5a-55fa-45f3-b30f-79bed87c12a9');
   background-position: bottom;
   background-size: cover;
+  z-index: 101;
 }
 
 .authPage h1, .authPage h3, .authPage p {
