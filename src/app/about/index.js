@@ -19,7 +19,7 @@ export default class About extends React.Component {
       </a>
       <section>
         <div class="flex">
-          <img alt="vector image of a girl" src="https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/girl1.png?alt=media&token=516f9e04-07fb-4a13-9a99-f0908a774612" class="singleBubble"/>
+          <img alt="vector illustration of a girl" src="https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/girl1.png?alt=media&token=516f9e04-07fb-4a13-9a99-f0908a774612" class="singleBubble"/>
           <span>
             <h3>Are you part of a Covid-19 social bubble?</h3>
             <p>One of the most commonly recommended ways to socialize during the pandemic while minimizing risk
@@ -55,10 +55,10 @@ export default class About extends React.Component {
         settings now use similar self-report check-ins regularly, but there hasn't been an easy way to do the same with your bubble – until now!</p>
       </span>
 
-      <img alt="vector image of a boy" src="https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/boy1.png?alt=media&token=4b717fe1-06e9-4544-ae03-e936c6ef9730" class="singleBubble"/>
+      <img alt="vector illustration of a boy" src="https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/boy1.png?alt=media&token=4b717fe1-06e9-4544-ae03-e936c6ef9730" class="singleBubble"/>
       </section>
       <section class="flex privacy">
-        <img alt="vector image of a group of people" src="https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/group.png?alt=media&token=b55c8ae9-7319-4e4f-936a-df6a8774c02a" class="group"/>
+        <img alt="vector illustration of a group of people" src="https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/group.png?alt=media&token=b55c8ae9-7319-4e4f-936a-df6a8774c02a" class="group"/>
         <span>
           <h3  >Your activity is <i>only</i> visible to the people in your bubble.</h3>
           <p> We will <b>never</b> track or ask your location, <b>never</b> gather any data using background
