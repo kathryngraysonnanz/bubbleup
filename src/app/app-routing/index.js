@@ -5,7 +5,6 @@ import {
   Switch
 } from "react-router-dom";
 import Home from '../home'
-import Invite from '../invitation'
 import About from '../about'
 
 export default function App() {
