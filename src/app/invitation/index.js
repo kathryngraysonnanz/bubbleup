@@ -43,9 +43,10 @@ export default class Invite extends React.Component {
             {this.state.name !== "hold" &&
               <>
                 <h3>You've been invited to join the bubble: <b>{this.state.name}</b></h3>
-                <p><b>NOTE:</b> You cannot be in two bubbles at once. Clicking
-                "Join" will be remove you from your current bubble and
-                add you to this new bubble.</p>
+                <br/>
+                <p><b>NOTE:</b> You cannot be in multiple bubbles at once. Clicking
+                "Join" will be remove you from any current bubble you're a member
+                of, and add you to this new bubble instead.</p>
                 <div>
                   <Link to="/" onClick={()=>this.props.declineInvite()}>Decline invitation</Link>
                   <Link to="/" onClick={()=>this.props.acceptInvite()}><Button>Join</Button></Link>

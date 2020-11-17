@@ -182,7 +182,6 @@ export default class UserSettings extends React.Component {
             id="username" name="username"/>
 
             <h3>Change Email Address</h3>
-
             <input onChange={this.handleChange} type="text"
             id="newEmail" name="newEmail"/>
 
@@ -190,7 +189,7 @@ export default class UserSettings extends React.Component {
 
             <p>Clicking the button below will send a password reset email to the
             address you have connected to this account. If you are also changing
-            your email address, change & save that first.</p><br/>
+            your email address, change and save that first.</p><br/>
             <Button onClick={()=>this.sendResetPWEmail(this.state.email)}>Send Reset Email</Button>
 <br/><br/>
 
@@ -233,7 +232,7 @@ export default class UserSettings extends React.Component {
             member. You will no longer appear as a member, and any data that was
             previously shared with the bubble will be removed. <b>Once you leave a
             bubble, you must be re-invited in order to re-join.</b></p>
-            <p className="leaveConfirm">Type "LEAVE" to confirm you want to
+            <p className="deleteConfirm">Type "LEAVE" to confirm you want to
             leave your current bubble:</p>
             <input onChange={this.handleChange} type="text"
             id="leaveBubble" name="leaveBubble"/>

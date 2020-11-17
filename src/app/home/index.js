@@ -176,7 +176,7 @@ export default class Home extends React.Component {
             <div>
               <div className="authHeader">
                 <h1>Welcome to <b>BubbleUp!</b></h1>
-                <h3>New here? <Link to="/about">Learn more.</Link></h3> 
+                <h3>New here? <Link to="/about">Learn more.</Link></h3>
               </div>
             { !this.state.login &&
               <>
@@ -266,9 +266,11 @@ export default class Home extends React.Component {
                 <p>Your last check-in was for {this.state.lastCheckIn} •
                  <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
                 </p>
+                { this.state.bubble &&
                 <Button onClick={(e)=>this.toggleCheckinVisibility()}>
                   <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
                 </Button>
+                }
               </div>
             </div>
             { this.state.name &&
@@ -283,7 +285,7 @@ export default class Home extends React.Component {
           </div>
         </div>
         }
-        { this.state.inviteBubble &&
+        { this.state.inviteBubble && this.state.authenticated && 
           <Invite
             bubbleID={this.state.inviteBubble}
             declineInvite={this.declineInvite}
