@@ -1,0 +1,194 @@
+.about section {
+  padding: 30px 0;
+}
+
+.about a {
+  text-decoration: none;
+}
+
+.about p a {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.about .emailFlex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about .emailFlex input {
+  margin: 0 10px;
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  font-size: 16px;
+  max-width: 200px;
+  padding: 5px;
+}
+
+.about .emailFlex .clear input {
+  background-color: #51698D !important;
+  color: white !important;
+  padding: 6px 15px;
+  border: 0px;
+  border-radius: 5px;
+}
+
+.about .flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.about .singleBubble {
+  width: 100%;
+  max-width: 170px;
+  padding: 10px;
+}
+
+.about .group {
+  max-width: 350px;
+  width: 100%;
+  padding: 10px;
+}
+
+.about .header {
+  background-image: url(https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/FINAL%20-%20Twitter%20Header%20-%205.png?alt=media&token=fb88cb42-9edd-4b67-94fb-c0291f19b57e);
+  background-position: center;
+  background-size: cover;
+  max-width: 100%;
+  min-height: 230px;
+}
+
+.about .header h1, .header h3 {
+  max-width: 500px;
+  text-align: center;
+  margin: auto;
+  color: white;
+}
+
+.about .header h3 {
+  font-weight: 100;
+  margin: 30px auto 0;
+  color: white;
+}
+
+.about p, .about ul {
+  max-width: 800px;
+    font-size: 1rem;
+}
+
+.about ul {
+  margin: 20px;
+}
+
+.about h1, .about h3, .about p, .about ul {
+  padding: 0 20px;
+}
+
+.about .emailBanner p {
+  background-color: #84B99A;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 10px 0;
+  margin: 0;
+}
+
+.about .background {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  width: 100%;
+  max-width: 100%;
+  opacity: 0.3;
+}
+
+.about h1 {
+  font-size: 5.5rem;
+  text-align: center;
+  margin: 0;
+  padding: 30px 0 0;
+  color: #51698D;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  letter-spacing: -4px;
+}
+
+.about h3 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.8rem;
+  color: #27444d;
+  margin: 0 0 20px 0;
+}
+
+.about .callout {
+  background-color: #84B99A;
+  text-align: center;
+  color: white;
+}
+
+.about .callout h3 {
+  color: white;
+}
+
+.about .callout p {
+  max-width: 100%;
+}
+
+.about .blueBG {
+  background-color: #E5E9EE;
+flex-wrap: wrap-reverse;
+}
+
+.about .privacy span {
+  max-width: 700px;
+  width: 100%;
+}
+
+@media (max-width: 1070px) {
+  .about .privacy span {
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 600px) {
+  .about h1 {
+    font-size: 4rem;
+    padding: 0;
+  }
+
+  .about .header h3 {
+    font-size: 1.4rem;
+    max-width: 300px;
+  }
+
+  .about h3 {
+    font-size: 1.4rem;
+  }
+
+  .about .header {
+    background-image: url(https://firebasestorage.googleapis.com/v0/b/bubbleup-ecae7.appspot.com/o/FINAL%20-%20Twitter%20Header%20-%205.png?alt=media&token=fb88cb42-9edd-4b67-94fb-c0291f19b57e);
+    background-position: center;
+    background-size: 180% 100%;
+    max-width: 100%;
+    min-height: 180px;
+    padding: 30px 0 10px 0;
+  }
+
+  .about .singleBubble {
+    width: 100%;
+    max-width: 100px;
+    padding: 10px;
+  }
+
+  .about .group {
+    max-width: 300px;
+    width: 100%;
+    padding: 10px;
+  }
+}

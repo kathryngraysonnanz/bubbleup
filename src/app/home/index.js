@@ -259,7 +259,7 @@ export default class Home extends React.Component {
                 <FontAwesomeIcon icon={faUserCircle} />
               </button></h1>
               <div>
-                <p>Your last check-in was {this.state.lastCheckIn} •
+                <p>Your last check-in was for {this.state.lastCheckIn} •
                  <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
                 </p>
                 <Button onClick={(e)=>this.toggleCheckinVisibility()}>

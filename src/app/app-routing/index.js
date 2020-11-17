@@ -6,11 +6,14 @@ import {
 } from "react-router-dom";
 import Home from '../home'
 import Invite from '../invitation'
+import About from '../about'
 
 export default function App() {
   return (
     <Router>
       <Switch>
+        <Route path="/about"
+          component={About} />
         <Route path="/:bubbleID"
           component={Home} />
         <Route path="/">

@@ -174,8 +174,7 @@ export default class BubbleSettings extends React.Component {
           </div>
           <form onSubmit={this.handleSubmit}>
             <h3>Bubble Name</h3>
-            <p>Bubble names are optional and just for fun. We’ll use the name
-            “My Bubble” if nothing is provided – currently, your bubble's name
+            <p>Bubble names are optional and just for fun. Currently, your bubble's name
             is <b>{this.props.name}</b>. </p>
 
             <input onChange={this.handleChange} type="text" maxLength="60"

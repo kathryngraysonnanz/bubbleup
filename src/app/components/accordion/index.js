@@ -35,7 +35,7 @@ function Accordion(props) {
 
         </div>
         <div>
-          <p>Last check-in:</p>
+          <p>Last check in:</p>
           <p><FontAwesomeIcon icon={faCalendarCheck} /> {props.lastCheckIn}</p>
         </div>
       </button>
