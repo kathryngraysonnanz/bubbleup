@@ -148,7 +148,7 @@ export default class BubbleSettings extends React.Component {
 
   render() {
 
-    let inviteURL = "http://localhost:3000/"+this.props.bubbleId
+    let inviteURL = window.location.href+this.props.bubbleId
 
     return (
       <div className="overlayBackground">

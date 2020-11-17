@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -173,7 +174,10 @@ export default class Home extends React.Component {
         { !this.state.authenticated &&
           <div className="authPage">
             <div>
-            <h1>Welcome to <b>BubbleUp!</b></h1>
+              <div className="authHeader">
+                <h1>Welcome to <b>BubbleUp!</b></h1>
+                <h3>New here? <Link to="/about">Learn more.</Link></h3> 
+              </div>
             { !this.state.login &&
               <>
                 <h3>

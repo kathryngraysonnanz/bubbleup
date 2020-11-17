@@ -86,6 +86,23 @@ h2, p {
   z-index: 101;
 }
 
+.authHeader {
+  padding-bottom: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.authHeader h3 {
+  font-weight: 100;
+  background-color: #E5E9EE;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.authHeader h3 a {
+  color: inherit;
+}
+
 .authPage h1, .authPage h3, .authPage p {
   color: #3D405B;
   text-align: center;
