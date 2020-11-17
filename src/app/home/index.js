@@ -176,7 +176,8 @@ export default class Home extends React.Component {
             <div>
               <div className="authHeader">
                 <h1>Welcome to <b>BubbleUp!</b></h1>
-                <h3>New here? <Link to="/about">Learn more.</Link></h3>
+                <p><i>NOTE: We're still in beta, so there will be bugs –
+                we're a work in progress!</i> <Link to="/about"><b>Learn more.</b></Link></p>
               </div>
             { !this.state.login &&
               <>
@@ -285,7 +286,7 @@ export default class Home extends React.Component {
           </div>
         </div>
         }
-        { this.state.inviteBubble && this.state.authenticated && 
+        { this.state.inviteBubble && this.state.authenticated &&
           <Invite
             bubbleID={this.state.inviteBubble}
             declineInvite={this.declineInvite}
