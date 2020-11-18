@@ -5,8 +5,6 @@ import { db } from "../services/firebase"
 
 import Button from '../components/button'
 import Accordion from '../components/accordion'
-import BubbleSettings from '../bubble-settings'
-import BubbleSetup from '../bubble-setup'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog, faUsers } from '@fortawesome/free-solid-svg-icons'

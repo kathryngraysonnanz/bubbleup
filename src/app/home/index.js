@@ -5,8 +5,6 @@ import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
 import { db } from "../services/firebase"
 
-import Checkin from '../checkin'
-import UserSettings from '../user-settings'
 import Bubble from '../bubble'
 import Invite from '../invitation'
 
