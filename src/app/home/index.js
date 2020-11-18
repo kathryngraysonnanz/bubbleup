@@ -232,7 +232,7 @@ export default class Home extends React.Component {
                 </div>
                 <div>
                   {this.state.error ? (
-                    <p>{this.state.error}</p>
+                    <p className="authTextError">{this.state.error}</p>
                   ) : null}
                   <Button type="submit">Login</Button>
                 </div>

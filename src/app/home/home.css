@@ -154,6 +154,11 @@ h2, p {
   margin: 0;
 }
 
+p.authTextError {
+  color: #fff;
+
+}
+
 @media (max-width: 500px){
   .welcome div {
     flex-wrap: wrap;
