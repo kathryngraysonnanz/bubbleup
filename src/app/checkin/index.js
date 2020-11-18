@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -58,8 +59,8 @@ export default class Checkin extends React.Component {
 
     try {
 
-      db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid).update({
-        name: this.props.name,
+      db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid).update({
+        name: this.props.location.state.name,
         lastCheckIn: this.state.checkInDate
       });
 
@@ -68,7 +69,7 @@ export default class Checkin extends React.Component {
       });
 
       if (this.state.socialized === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           socialized: [this.state.socialized, this.state.checkInDate],
           indoors: [this.state.indoors],
           unmasked: [this.state.unmasked],
@@ -77,58 +78,58 @@ export default class Checkin extends React.Component {
       }
 
       if (this.state.travel === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           travel: [this.state.travel, this.state.checkInDate],
           overnight: [this.state.overnight]
         });
       }
 
       if (this.state.publicTransport === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           publicTransport: [this.state.publicTransport, this.state.checkInDate]
         });
       }
 
       if (this.state.publicSpace === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           publicSpace: [this.state.publicSpace, this.state.checkInDate]
         });
       }
 
       if (this.state.tested === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           tested: [this.state.tested, this.state.checkInDate],
           testResults: [this.state.testResults]
         });
       }
 
       if (this.state.contactPositive === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           contactPositive: [this.state.contactPositive, this.state.checkInDate]
         });
       }
 
       if (this.state.symptoms === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           symptoms: [this.state.symptoms, this.state.checkInDate]
         });
       }
 
       if (this.state.quarantining === true) {
-        db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
           quarantining: [this.state.quarantining, this.state.checkInDate],
           quarantineEnd: [this.state.quarantineEnd]
         });
       }
 
-      db.ref('bubbles/' + this.props.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+      db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
         status: [this.state.status, this.state.checkInDate]
       });
     } catch (error) {
       this.setState({ writeError: error.message });
     }
 
-    this.props.toggle()
+    this.props.history.push('/');
   }
 
   handleChange(event) {
@@ -184,7 +185,9 @@ export default class Checkin extends React.Component {
         <div className="contentWrapper">
           <div className="title">
             <h1><b>Check</b> In</h1>
-            <button onClick={()=>this.props.toggle()}><h1>X</h1></button>
+            <Link to='/'>
+              <h1>X</h1>
+            </Link>
           </div>
           <form onSubmit={this.handleSubmit}>
             <div className="dateWrapper">

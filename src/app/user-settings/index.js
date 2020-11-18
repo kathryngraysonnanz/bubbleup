@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -61,7 +62,7 @@ export default class UserSettings extends React.Component {
     this.setState({ writeError: null });
 
     var user = firebase.auth().currentUser;
-    var bubbleID = this.props.bubbleID
+    var bubbleID = this.props.location.state.bubbleID
 
     try {
 
@@ -113,7 +114,7 @@ export default class UserSettings extends React.Component {
       console.log("error!")
     }
 
-    this.props.toggle();
+    this.props.history.push('/');
   }
 
   sendResetPWEmail(email) {
@@ -136,7 +137,9 @@ export default class UserSettings extends React.Component {
         <div className="contentWrapper userSettings">
           <div className="title">
             <h1><b>User</b> Settings</h1>
-            <button onClick={()=>this.props.toggle()}><h1>X</h1></button>
+            <Link to='/'>
+              <h1>X</h1>
+            </Link>
           </div>
 
           <>

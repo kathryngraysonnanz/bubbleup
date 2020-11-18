@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import { db } from "../services/firebase"
 
@@ -19,22 +20,8 @@ export default class Bubble extends React.Component {
     this.state = {
       readError: null,
       writeError: null,
-      admin: this.props.admin,
-
-      bubbleSettingsVisible: false,
-      bubbleSetupVisible: false,
+      admin: this.props.admin
     }
-    this.toggleBubbleSettingsVisibility = this.toggleBubbleSettingsVisibility.bind(this);
-    this.toggleBubbleSetupVisibility = this.toggleBubbleSetupVisibility.bind(this);
-  }
-
-
-  toggleBubbleSettingsVisibility() {
-    this.setState({ bubbleSettingsVisible: !this.state.bubbleSettingsVisible });
-  }
-
-  toggleBubbleSetupVisibility() {
-    this.setState({ bubbleSetupVisible: !this.state.bubbleSetupVisible });
   }
 
   componentDidMount(){
@@ -199,26 +186,22 @@ export default class Bubble extends React.Component {
 
     return (
       <div className="bubble">
-        { this.state.bubbleSettingsVisible &&
-          <BubbleSettings
-            toggle={this.toggleBubbleSettingsVisibility}
-            members={this.state.members}
-            name={this.state.name}
-            bubbleId={this.props.bubbleID}
-          />
-        }
-        { this.state.bubbleSetupVisible &&
-          <BubbleSetup toggle={this.toggleBubbleSetupVisibility} username={this.props.username}/>
-        }
         { this.props.bubbleID &&
           <>
           <div className="bubbleInfo">
             <div className="bubbleName">
               <h2>{this.state.name}</h2>
               { this.state.admin &&
-                <button onClick={(e) => this.toggleBubbleSettingsVisibility()}>
-                  <h2>{ this.state.admin && <FontAwesomeIcon icon={faCog} /> }</h2>
-                </button>
+                <Link to={{
+                  pathname: '/bubble-settings',
+                  state: {
+                    members: this.state.members,
+                    name: this.state.name,
+                    bubbleId: this.props.bubbleID
+                  }
+                }}>
+                  <h2>{ this.state.admin && <FontAwesomeIcon icon={faCog}/> }</h2>
+                </Link>
               }
             </div>
           </div>
@@ -234,7 +217,14 @@ export default class Bubble extends React.Component {
             non-discoverable. You must be invited by a member in order
             to join an existing bubble.
            </p>
-            <Button onClick={(e)=>this.toggleBubbleSetupVisibility()}><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
+             <Link to={{
+               pathname: '/bubble-setup',
+               state: {
+                 username: this.props.username
+               }
+             }}>
+              <Button><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
+            </Link>
           </div>
         }
       </div>

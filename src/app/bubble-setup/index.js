@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
@@ -43,7 +44,7 @@ export default class BubbleSetup extends React.Component {
     });
 
     db.ref('bubbles/' + bubbleUUID + '/members/' + user).update({
-      name: this.props.username,
+      name: this.props.location.state.username,
       admin: true
     })
 
@@ -52,7 +53,7 @@ export default class BubbleSetup extends React.Component {
       admin: true
     });
 
-    this.props.toggle()
+    this.props.history.push('/');
   }
 
   async handleBubbleCreation(event) {
@@ -86,14 +87,14 @@ export default class BubbleSetup extends React.Component {
 
   render() {
 
-    let inviteURL = window.location.href+this.props.bubbleId
+    let inviteURL = window.location.href+this.state.bubbleUUID
 
     return (
       <div className="overlayBackground">
         <div className="contentWrapper bubbleSettings">
           <div className="title">
             <h1>Start a new <b>Bubble</b></h1>
-            <button onClick={()=>this.props.toggle()}><h1>X</h1></button>
+            <Link to='/'><h1>X</h1></Link>
           </div>
           <form onSubmit={this.handleBubbleCreation}>
             <h3>Bubble Name</h3>
