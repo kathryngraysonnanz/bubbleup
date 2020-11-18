@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import { auth } from "../services/firebase";
 import { db } from "../services/firebase"
@@ -17,8 +18,8 @@ export default class BubbleSettings extends React.Component {
       readError: null,
       writeError: null,
       invites: '',
-      members: this.props.members,
-      bubbleName: this.props.name,
+      members: this.props.location.state.members,
+      bubbleName: this.props.location.state.name,
       authUpdate: false,
       memberToRemove: false
     };
@@ -43,17 +44,18 @@ export default class BubbleSettings extends React.Component {
     this.setState({ writeError: null });
 
     try {
-      await db.ref('bubbles/' + this.props.bubbleId).update({
+      await db.ref('bubbles/' + this.props.location.state.bubbleId).update({
         name: this.state.bubbleName
       });
     } catch (error) {
       this.setState({ writeError: error.message });
     }
-    this.props.toggle()
+
+    this.props.history.push('/');
   }
 
   updateMembers(){
-    db.ref("/bubbles/" + this.props.bubbleId).on("value", snapshot => {
+    db.ref("/bubbles/" + this.props.location.state.bubbleId).on("value", snapshot => {
       var members = (snapshot.val() && snapshot.val().members) || null;
       this.setState ({
         members: members
@@ -66,7 +68,7 @@ export default class BubbleSettings extends React.Component {
       db.ref('users/' + memberId).update({
         admin: true
       });
-      db.ref('bubbles/' + this.props.bubbleId + '/members/' + memberId).update({
+      db.ref('bubbles/' + this.props.location.state.bubbleId + '/members/' + memberId).update({
         admin: true
       });
       this.updateMembers();
@@ -80,7 +82,7 @@ export default class BubbleSettings extends React.Component {
       db.ref('users/' + memberId).update({
         bubble: false
       });
-      db.ref('bubbles/' + this.props.bubbleId + '/members/' + memberId).remove();
+      db.ref('bubbles/' + this.props.location.state.bubbleId + '/members/' + memberId).remove();
       this.updateMembers();
     } catch (error) {
       console.log('error')
@@ -148,14 +150,14 @@ export default class BubbleSettings extends React.Component {
 
   render() {
 
-    let inviteURL = window.location.href+this.props.bubbleId
+    let inviteURL = window.location.href+this.props.location.state.bubbleId
 
     return (
       <div className="overlayBackground">
         <div className="contentWrapper bubbleSettings">
           <div className="title">
             <h1><b>Bubble</b> Settings</h1>
-            <button onClick={()=>this.props.toggle()}><h1>X</h1></button>
+            <Link to='/'><h1>X</h1></Link>
           </div>
           <div className="editBubbleMembers">
             <h3>Bubble Members</h3>
@@ -175,7 +177,7 @@ export default class BubbleSettings extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <h3>Bubble Name</h3>
             <p>Bubble names are optional and just for fun. Currently, your bubble's name
-            is <b>{this.props.name}</b>. </p>
+            is <b>{this.props.location.state.name}</b>. </p>
 
             <input onChange={this.handleChange} type="text" maxLength="60"
             id="bubbleName" name="bubbleName"/>
