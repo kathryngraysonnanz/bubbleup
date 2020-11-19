@@ -1,9 +1,27 @@
-const functions = require('firebase-functions');
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+admin.initializeApp();
+const db = firebase.database();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+// Sendgrid Config
+import * as sgMail from '@sendgrid/mail';
+
+const API_KEY = functions.config().sendgrid.key;
+const TEMPLATE_ID = functions.config().sendgrid.template;
+sgMail.setApiKey(API_KEY);
+
+// Send a reminder email to all opted-in users
+export const weeklyReminder =  functions.pubsub.schedule('every wednesday 07:00').onRun(async context => {
+
+    db.ref("/reminders").on("value", snapshot => {
+    var emails = (snapshot.val() && snapshot.val().users) || false;
+
+    const msg = {
+        to: emails,
+        from: 'hello@bubbleupapp.com',
+        templateId: TEMPLATE_ID
+    };
+
+    return sgMail.send(msg);
+
+});
