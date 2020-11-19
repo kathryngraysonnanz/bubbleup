@@ -128,6 +128,8 @@ h2, p {
   min-height: 160px;
 }
 
+/* Is this the fix? To add min-width to form.signin like the form.signup? */
+
 .authPage form.signin {
   min-height: 155px;
 }
