@@ -11,7 +11,7 @@ const TEMPLATE_ID = functions.config().sendgrid.template;
 sgMail.setApiKey(API_KEY);
 
 // Send a reminder email to all opted-in users
-export const weeklyReminder =  functions.pubsub.schedule('every wednesday 07:00').onRun(async context => {
+export const weeklyReminder =  functions.pubsub.schedule('every wednesday 21:03').onRun(async context => {
 
     db.ref("/reminders").on("value", snapshot => {
     var emails = (snapshot.val() && snapshot.val().users) || false;
