@@ -199,7 +199,7 @@ export default class Home extends React.Component {
                     onChange={this.handleChange} value={this.state.password}></input>
                   </div>
                   <div>
-                    {this.state.error ? <p>{this.state.error}</p> : null}
+                    {this.state.error ? <p className="authTextError">{this.state.error}</p> : null}
                     <Button type="submit">Sign up</Button>
                   </div>
                 </form>

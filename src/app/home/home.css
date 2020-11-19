@@ -125,7 +125,11 @@ h2, p {
 }
 
 .authPage form.signup {
-  min-height: 140px;
+  min-height: 160px;
+}
+
+.authPage form.signin {
+  min-height: 155px;
 }
 
 .authPage form div {
