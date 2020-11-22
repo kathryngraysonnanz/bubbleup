@@ -357,7 +357,9 @@ export default class Checkin extends React.Component {
             <h3>Do you have a status update or message to add to your check-in?</h3>
             <textarea onChange={this.handleChange} maxLength="300" id="status" name="status"></textarea>
 
-            <Button type="submit"><FontAwesomeIcon icon={faCalendarCheck} /> Share with my bubble</Button>
+            <div className="submitButton">
+              <Button type="submit"><FontAwesomeIcon icon={faCalendarCheck} /> Share with my bubble</Button>
+            </div>
           </form>
         </div>
       </div>

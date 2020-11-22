@@ -99,7 +99,8 @@ form > div:first-child {
   font-size: 0.9rem;
 }
 
-form button:last-child {
-  float: right;
+.submitButton {
+  display: flex;
+  justify-content: flex-end;
   margin-bottom: 30px;
 }

@@ -209,7 +209,9 @@ export default class BubbleSettings extends React.Component {
               }
             </div>
 
-            <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
+            <div className="submitButton">
+              <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
+            </div>
           </form>
         </div>
       </div>

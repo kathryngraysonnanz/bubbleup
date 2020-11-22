@@ -36,6 +36,24 @@ export default class UserSettings extends React.Component {
     this.deleteAccount = this.deleteAccount.bind(this);
   }
 
+  componentDidMount() {
+
+      try {
+        db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
+          var username = (snapshot.val() && snapshot.val().username) || false;
+          let bubble = (snapshot.val() && snapshot.val().bubble) || false;
+          var reminders = (snapshot.val() && snapshot.val().reminders) || false;
+          this.setState ({
+            name: username,
+            bubble: bubble,
+            reminders: reminders
+          })
+        });
+      } catch (error) {
+        this.setState({ readError: error.message });
+      }
+    }
+
   reAuth(event) {
     event.preventDefault();
     this.setState({ reAuth: true })
@@ -77,7 +95,10 @@ export default class UserSettings extends React.Component {
 
       if (this.state.reminders) {
         db.ref('users/' + user.uid ).update({
-          reminders: this.state.reminders
+          reminders: true
+        });
+        db.ref('reminders/' + user.uid).set({
+          email: this.state.email
         });
       }
 
@@ -196,40 +217,14 @@ export default class UserSettings extends React.Component {
             <Button onClick={()=>this.sendResetPWEmail(this.state.email)}>Send Reset Email</Button>
 <br/><br/>
 
-            {/* TODO: Re-enable when reminders are ready
 
             <h3>Check-in Reminders</h3>
-            <p>Send me a check-in reminder email:</p>
+            <input
+              onClick={(e)=>this.setState({reminders: !this.state.reminders})}
+              type="checkbox" id="socialized" name="socialized" checked={this.state.reminders}/>
+            <label for="socialized">Yes, send me a weekly check-in reminder email.</label>
 
-
-            <div className="reminderRadio">
-              <div>
-                <input type="radio" id="daily" name="reminders" value="daily"
-                  onClick={(e)=>this.setState({reminders: 'daily'})}/>
-                <label for="daily">Daily</label>
-              </div>
-
-              <div>
-                <input type="radio" id="weekly" name="reminders" value="weekly"
-                  onClick={(e)=>this.setState({reminders: 'weekly'})}/>
-                <label for="weekly">Weekly</label>
-              </div>
-
-              <div>
-                <input type="radio" id="biweekly" name="reminders" value="biweekly"
-                  onClick={(e)=>this.setState({reminders: 'biweekly'})}/>
-                <label for="biweekly">Every other week</label>
-              </div>
-
-              <div>
-                <input type="radio" id="never" name="reminders" value="never"
-                  onClick={(e)=>this.setState({reminders: 'never'})}/>
-                <label for="never">Don't send me reminder emails</label>
-              </div>
-            </div>
-
-            */}
-
+            <br/><br/>
             <h3>Leave my bubble</h3>
             <p>This will remove you from the bubble in which you are currently a
             member. You will no longer appear as a member, and any data that was
@@ -249,7 +244,9 @@ export default class UserSettings extends React.Component {
             <input onChange={this.handleChange} type="text"
             id="deleteAccount" name="deleteAccount"/>
 
-            <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
+            <div className="submitButton">
+              <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Save changes</Button>
+            </div>
           </form>
           }
           </>

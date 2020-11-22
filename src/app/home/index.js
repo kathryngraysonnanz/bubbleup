@@ -128,6 +128,14 @@ export default class Home extends React.Component {
     });
   }
 
+  sendResetPWEmail(email) {
+    firebase.auth().sendPasswordResetEmail(email).then(function() {
+      // Email sent.
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
+
   toggleInviteVisibility() {
     this.setState({ inviteVisible: !this.state.inviteVisible });
   }
@@ -183,7 +191,7 @@ export default class Home extends React.Component {
                     <input placeholder="Password" name="password" type="password"
                     onChange={this.handleChange} value={this.state.password}></input>
                   </div>
-                  <div>
+                  <div className="submitButton">
                     {this.state.error ? <p>{this.state.error}</p> : null}
                     <Button type="submit">Sign up</Button>
                   </div>
@@ -215,12 +223,18 @@ export default class Home extends React.Component {
                     type="password"
                   />
                 </div>
-                <div>
+                <div className="forgotPW">
+                  <p>Forgot password?</p>
+                  <button onClick={()=>this.sendResetPWEmail(this.state.email)}>Send reset email</button>
+                </div>
+                <>
                   {this.state.error ? (
                     <p>{this.state.error}</p>
                   ) : null}
-                  <Button type="submit">Login</Button>
-                </div>
+                  <div className="submitButton">
+                    <Button type="submit">Login</Button>
+                  </div>
+                </>
               </form>
             </>
             }
