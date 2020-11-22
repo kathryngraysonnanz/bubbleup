@@ -13,8 +13,8 @@ export default class About extends React.Component {
       </section>
       <a class="emailBanner" href="#signup">
         <p>
-        We're still in development – <u>sign up or fill out our feature survey</u> and you'll be the first to know
-          when we launch!
+        We're preparing for beta launch in early December – <u>make sure you're on the list</u> to be
+        notified when we open sign-ups!
         </p>
       </a>
       <section>
