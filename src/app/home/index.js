@@ -5,8 +5,6 @@ import firebase from 'firebase/app'
 import { auth } from "../services/firebase";
 import { db } from "../services/firebase"
 
-import Checkin from '../checkin'
-import UserSettings from '../user-settings'
 import Bubble from '../bubble'
 import Invite from '../invitation'
 
@@ -26,7 +24,6 @@ export default class Home extends React.Component {
       loading: true,
       login: true,
 
-      checkinVisible: false,
       userSettingsVisible: false,
       inviteVisible: true,
 
@@ -42,10 +39,6 @@ export default class Home extends React.Component {
 
     this.declineInvite = this.declineInvite.bind(this);
     this.acceptInvite = this.acceptInvite.bind(this);
-
-    this.toggleInviteVisibility = this.toggleInviteVisibility.bind(this);
-    this.toggleCheckinVisibility = this.toggleCheckinVisibility.bind(this);
-    this.toggleUserSettingsVisibility = this.toggleUserSettingsVisibility.bind(this)
   }
 
   componentDidMount() {
@@ -135,12 +128,12 @@ export default class Home extends React.Component {
     });
   }
 
-  toggleCheckinVisibility() {
-    this.setState({ checkinVisible: !this.state.checkinVisible });
-  }
-
-  toggleUserSettingsVisibility() {
-    this.setState({ userSettingsVisible: !this.state.userSettingsVisible });
+  sendResetPWEmail(email) {
+    firebase.auth().sendPasswordResetEmail(email).then(function() {
+      // Email sent.
+    }).catch(function(error) {
+      // An error happened.
+    });
   }
 
   toggleInviteVisibility() {
@@ -198,8 +191,8 @@ export default class Home extends React.Component {
                     <input placeholder="Password" name="password" type="password"
                     onChange={this.handleChange} value={this.state.password}></input>
                   </div>
-                  <div>
-                    {this.state.error ? <p className="authTextError">{this.state.error}</p> : null}
+                  <div className="submitButton">
+                    {this.state.error ? <p>{this.state.error}</p> : null}
                     <Button type="submit">Sign up</Button>
                   </div>
                 </form>
@@ -230,12 +223,18 @@ export default class Home extends React.Component {
                     type="password"
                   />
                 </div>
-                <div>
+                <div className="forgotPW">
+                  <p>Forgot password?</p>
+                  <button onClick={()=>this.sendResetPWEmail(this.state.email)}>Send reset email</button>
+                </div>
+                <>
                   {this.state.error ? (
                     <p className="authTextError">{this.state.error}</p>
                   ) : null}
-                  <Button type="submit">Login</Button>
-                </div>
+                  <div className="submitButton">
+                    <Button type="submit">Login</Button>
+                  </div>
+                </>
               </form>
             </>
             }
@@ -244,33 +243,35 @@ export default class Home extends React.Component {
         }
         { this.state.authenticated &&
         <div className="background">
-          { this.state.checkinVisible &&
-            <Checkin
-              toggle={this.toggleCheckinVisibility}
-              bubble={this.state.bubble}
-              name={this.state.name}
-            />
-          }
-          { this.state.userSettingsVisible &&
-            <UserSettings
-            bubbleID={this.state.bubble}
-            toggle={this.toggleUserSettingsVisibility}/>
-          }
-
           <div className="contentWrapper">
             <div className="welcome">
               <h1>Welcome back, <b>{this.state.name}</b>&nbsp;
-              <button onClick={(e)=>this.toggleUserSettingsVisibility()}>
+                <Link to={{
+                  pathname: './user-settings',
+                  state: {
+                    bubbleID: this.state.bubble
+                  }
+                }}>
                 <FontAwesomeIcon icon={faUserCircle} />
-              </button></h1>
+                </Link>
+                </h1>
               <div>
                 <p>Your last check-in was for {this.state.lastCheckIn} •
                  <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
                 </p>
                 { this.state.bubble &&
-                <Button onClick={(e)=>this.toggleCheckinVisibility()}>
-                  <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
-                </Button>
+                  <Link to={{
+                    pathname: '/checkin',
+                    state: {
+                      bubble: this.state.bubble,
+                      name: this.state.name
+                    }
+                  }}
+                  >
+                  <Button>
+                    <FontAwesomeIcon icon={faCalendarCheck} /> Check-in
+                  </Button>
+                </Link>
                 }
               </div>
             </div>
@@ -280,7 +281,6 @@ export default class Home extends React.Component {
                 username={this.state.username}
                 bubbleID={this.state.bubble}
                 admin={this.state.admin}
-                toggle={this.toggleBubbleSettingsVisibility}
               />
             }
           </div>
