@@ -43,7 +43,6 @@ export default class Home extends React.Component {
 
   componentDidMount() {
 
-    let bubbleID = false
     if (this.props.match) {
       this.setState ({ inviteURL: this.props.match.params.bubbleID })
     }
