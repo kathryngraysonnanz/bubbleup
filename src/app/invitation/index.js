@@ -19,29 +19,20 @@ export default class Invite extends React.Component {
 
     let uuid
 
+    db.ref('bubbles').orderByChild('link').equalTo(this.props.inviteURL).on("value", snapshot => {
+        let referencedBubble = snapshot.val()
 
-      db.ref('bubbles').orderByChild('link').equalTo(this.props.bubbleID).on("value", function(snapshot) {
-          let referencedBubble = snapshot.val()
+        if (referencedBubble) {
           uuid = Object.keys(referencedBubble)[0]
-      });
-
-      let bubbleID = uuid;
-      this.setState ({ bubbleID: uuid })
-
-      if (bubbleID) {
-        try {
-          db.ref("/bubbles/" + bubbleID).on("value", snapshot => {
-            var name = (snapshot.val() && snapshot.val().name) || null;
-            this.setState ({
-              name: name,
-              bubbleID: bubbleID
-            });
-          });
-        } catch (error) {
-          this.setState({ name: false });
+        } else {
+          uuid = false
         }
-      }
 
+        this.setState ({
+          bubbleID: uuid,
+          name: referencedBubble.[uuid].name
+        })
+    });
   }
 
   render(){
@@ -60,8 +51,8 @@ export default class Invite extends React.Component {
                 "Join" will be remove you from any current bubble you're a member
                 of, and add you to this new bubble instead.</p>
                 <div>
-                  <Link to="/" onClick={()=>this.props.declineInvite()}>Decline invitation</Link>
-                  <Link to="/" onClick={()=>this.props.acceptInvite()}><Button>Join</Button></Link>
+                  <a href="/" onClick={()=>this.props.declineInvite()}>Decline invitation</a>
+                  <a href='/' onClick={()=>this.props.acceptInvite(this.state.bubbleID)}><Button>Join</Button></a>
                 </div>
               </>
             }
