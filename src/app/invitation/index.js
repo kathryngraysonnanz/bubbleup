@@ -1,5 +1,4 @@
 import React from "react";
-import {Link} from "react-router-dom";
 
 import { db } from "../services/firebase"
 
@@ -17,19 +16,22 @@ export default class Invite extends React.Component {
 
   componentDidMount(){
 
-    let bubbleID = this.props.bubbleID
+    let uuid
 
-    try {
-      db.ref("/bubbles/" + bubbleID).on("value", snapshot => {
-        var name = (snapshot.val() && snapshot.val().name) || null;
+    db.ref('bubbles').orderByChild('link').equalTo(this.props.inviteURL).on("value", snapshot => {
+        let referencedBubble = snapshot.val()
+
+        if (referencedBubble) {
+          uuid = Object.keys(referencedBubble)[0]
+        } else {
+          uuid = false
+        }
+
         this.setState ({
-          name: name,
-          bubbleID: bubbleID
-        });
-      });
-    } catch (error) {
-      this.setState({ name: false });
-    }
+          bubbleID: uuid,
+          name: referencedBubble.[uuid].name
+        })
+    });
   }
 
   render(){
@@ -48,8 +50,8 @@ export default class Invite extends React.Component {
                 "Join" will be remove you from any current bubble you're a member
                 of, and add you to this new bubble instead.</p>
                 <div>
-                  <Link to="/" onClick={()=>this.props.declineInvite()}>Decline invitation</Link>
-                  <Link to="/" onClick={()=>this.props.acceptInvite()}><Button>Join</Button></Link>
+                  <a href="/" onClick={()=>this.props.declineInvite()}>Decline invitation</a>
+                  <a href='/' onClick={()=>this.props.acceptInvite(this.state.bubbleID)}><Button>Join</Button></a>
                 </div>
               </>
             }

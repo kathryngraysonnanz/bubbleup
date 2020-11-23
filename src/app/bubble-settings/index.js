@@ -20,6 +20,7 @@ export default class BubbleSettings extends React.Component {
       invites: '',
       members: this.props.location.state.members,
       bubbleName: this.props.location.state.name,
+      link: this.props.location.state.link,
       authUpdate: false,
       memberToRemove: false
     };
@@ -29,6 +30,7 @@ export default class BubbleSettings extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.promote = this.promote.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.generateNewURL = this.generateNewURL.bind(this);
   }
 
   copyToClipboard = (e) => {
@@ -148,9 +150,33 @@ export default class BubbleSettings extends React.Component {
     )
   }
 
+  uuidv4() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)
+    );
+  }
+
+  generateNewURL(e) {
+    e.preventDefault();
+
+    let newUUID = this.uuidv4()
+
+    this.setState({ link: newUUID });
+
+    db.ref('bubbles/' + this.props.location.state.bubbleId ).update({
+      link: newUUID
+    });
+  }
+
   render() {
 
-    let inviteURL = window.location.href+this.props.location.state.bubbleId
+    let inviteURL
+
+    if (window.location.hostname === "localhost") {
+      inviteURL = "http://localhost:3000/"+this.state.link
+    } else {
+      inviteURL = window.location.hostname+this.state.link
+    }
 
     return (
       <div className="overlayBackground">
@@ -195,6 +221,7 @@ export default class BubbleSettings extends React.Component {
                 value={inviteURL}
                 id="inviteURL" name="inviteURL">
               </textarea>
+              <Button onClick={this.generateNewURL}>Generate a new link</Button>
               { document.queryCommandSupported('copy') &&
                 <div className="copyButton">
                   <Button onClick={this.copyToClipboard}>

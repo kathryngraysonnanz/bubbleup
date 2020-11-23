@@ -43,10 +43,8 @@ export default class Home extends React.Component {
 
   componentDidMount() {
 
-    let bubbleID = false
     if (this.props.match) {
-      bubbleID = this.props.match.params.bubbleID;
-      this.setState ({ inviteBubble: bubbleID })
+      this.setState ({ inviteURL: this.props.match.params.bubbleID })
     }
 
     auth().onAuthStateChanged((user) => {
@@ -59,7 +57,7 @@ export default class Home extends React.Component {
         try {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
-            let bubble = (snapshot.val() && snapshot.val().bubble) || bubbleID;
+            let bubble = (snapshot.val() && snapshot.val().bubble) || false;
             var admin = (snapshot.val() && snapshot.val().admin) || false;
             var lastCheckIn = (snapshot.val() && snapshot.val().lastCheckIn) || 'never';
             this.setState ({
@@ -141,21 +139,24 @@ export default class Home extends React.Component {
   }
 
   declineInvite() {
-    this.setState({ inviteBubble: false })
+    this.setState({
+      inviteBubble: false,
+      bubble: false
+    })
   }
 
-  acceptInvite() {
+  acceptInvite(bubbleID) {
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
-      bubble: this.state.inviteBubble,
+      bubble: bubbleID,
       admin: false
     });
 
-    firebase.database().ref('bubbles/' + this.state.inviteBubble + '/members/' + firebase.auth().currentUser.uid).update({
+    firebase.database().ref('bubbles/' + bubbleID + '/members/' + firebase.auth().currentUser.uid).update({
       name: this.state.name
     });
 
     this.setState({
-      bubble: this.state.inviteBubble,
+      bubble: bubbleID,
       inviteBubble: false
     })
   }
@@ -286,9 +287,9 @@ export default class Home extends React.Component {
           </div>
         </div>
         }
-        { this.state.inviteBubble && this.state.authenticated &&
+        { this.state.inviteURL && this.state.authenticated &&
           <Invite
-            bubbleID={this.state.inviteBubble}
+            inviteURL={this.state.inviteURL}
             declineInvite={this.declineInvite}
             acceptInvite={this.acceptInvite}/>
         }

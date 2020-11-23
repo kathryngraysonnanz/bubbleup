@@ -27,9 +27,11 @@ export default class Bubble extends React.Component {
       db.ref("/bubbles/" + this.props.bubbleID).on("value", snapshot => {
         var members = (snapshot.val() && snapshot.val().members) || null;
         var name = (snapshot.val() && snapshot.val().name) || null;
+        var link = (snapshot.val() && snapshot.val().link) || null;
         this.setState ({
           members: members,
-          name: name
+          name: name,
+          link: link
         });
       });
     } catch (error) {
@@ -193,6 +195,7 @@ export default class Bubble extends React.Component {
                 <Link to={{
                   pathname: '/bubble-settings',
                   state: {
+                    link: this.state.link,
                     members: this.state.members,
                     name: this.state.name,
                     bubbleId: this.props.bubbleID
