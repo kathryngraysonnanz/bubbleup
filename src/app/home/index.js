@@ -165,7 +165,7 @@ export default class Home extends React.Component {
 
     return (
       <>
-        { !this.state.authenticated &&
+        { !this.state.loading && !this.state.authenticated &&
           <div className="authPage">
             <div>
               <div className="authHeader">
@@ -242,7 +242,7 @@ export default class Home extends React.Component {
             </div>
           </div>
         }
-        { this.state.authenticated &&
+        { !this.state.loading && this.state.authenticated &&
         <div className="background">
           <div className="contentWrapper">
             <div className="welcome">
@@ -287,11 +287,18 @@ export default class Home extends React.Component {
           </div>
         </div>
         }
-        { this.state.inviteURL && this.state.authenticated &&
+        { !this.state.loading && this.state.inviteURL && this.state.authenticated &&
           <Invite
             inviteURL={this.state.inviteURL}
             declineInvite={this.declineInvite}
             acceptInvite={this.acceptInvite}/>
+        }
+        { this.state.loading &&
+          <div className="authPage">
+            <div className="inviteCallout">
+              <p>Loading...</p>
+            </div>
+          </div>
         }
       </>
     );

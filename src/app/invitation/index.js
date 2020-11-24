@@ -40,7 +40,7 @@ export default class Invite extends React.Component {
         { this.state.name &&
           <div className="inviteCallout">
             {this.state.name === "hold" &&
-              <p>loading</p>
+              <p>Loading...</p>
             }
             {this.state.name !== "hold" &&
               <>
