@@ -224,6 +224,7 @@ export default class Bubble extends React.Component {
                  username: this.props.username
                }
              }}>
+             {console.log(this.props.username)}
               <Button><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
             </Link>
           </div>

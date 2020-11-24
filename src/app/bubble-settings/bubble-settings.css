@@ -11,12 +11,17 @@
   margin: 20px 0 30px;
 }
 
-.editBubbleMembers table tr td{
-  padding: 5px 10px;
+.editBubbleMembers a {
+  text-decoration: underline;
 }
 
-.editBubbleMembers table tr td:nth-child(2) {
+.editBubbleMembers table tr td{
+  padding: 5px 10px;
   text-align: center;
+}
+
+.editBubbleMembers table tr td:first-child {
+  text-align: left;
 }
 
 .editBubbleMembers table tr:nth-child(even) {

@@ -279,7 +279,7 @@ export default class Home extends React.Component {
             { this.state.name &&
               <Bubble
                 userID={firebase.auth().currentUser.uid}
-                username={this.state.username}
+                username={this.state.name}
                 bubbleID={this.state.bubble}
                 admin={this.state.admin}
               />

@@ -20,7 +20,6 @@ export default class BubbleSetup extends React.Component {
       writeError: null,
 
       bubbleName: 'My Bubble',
-      invites: '',
       bubbleUUID: ''
     };
 
@@ -36,7 +35,7 @@ export default class BubbleSetup extends React.Component {
     this.setState({ copySuccess: true });
   };
 
-  writeBubbleData(bubbleName, bubbleUUID, invites) {
+  writeBubbleData(bubbleName, bubbleUUID) {
     let user = firebase.auth().currentUser.uid
 
     db.ref('bubbles/' + bubbleUUID).set({
@@ -56,18 +55,13 @@ export default class BubbleSetup extends React.Component {
     this.props.history.push('/');
   }
 
-  async handleBubbleCreation(event) {
+  handleBubbleCreation(event) {
     event.preventDefault();
-    this.setState({ error: '' });
-    try {
-      await this.writeBubbleData(
-        this.state.bubbleName,
-        this.state.bubbleUUID,
-        this.state.invites
-      )
-    } catch (error) {
-      this.setState({ error: error.message });
-    }
+
+    this.writeBubbleData(
+      this.state.bubbleName,
+      this.state.bubbleUUID
+    )
   }
 
   handleChange(event) {
@@ -82,12 +76,14 @@ export default class BubbleSetup extends React.Component {
         (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)
       );
     }
-    this.setState({ bubbleUUID: uuidv4() })
+
+    this.setState({ bubbleUUID: uuidv4() });
+    this.setState({ linkUUID: uuidv4() });
   }
 
   render() {
 
-    let inviteURL = window.location.href+this.state.bubbleUUID
+    let inviteURL = window.location.href+this.state.linkUUID
 
     return (
       <div className="overlayBackground">
@@ -96,7 +92,7 @@ export default class BubbleSetup extends React.Component {
             <h1>Start a new <b>Bubble</b></h1>
             <Link to='/'><h1>X</h1></Link>
           </div>
-          <form onSubmit={this.handleBubbleCreation}>
+          <form>
             <h3>Bubble Name</h3>
             <p>Bubble names are optional and just for fun. We’ll use the name
             “My Bubble” if nothing is provided. <b>You can update this name
@@ -132,7 +128,7 @@ export default class BubbleSetup extends React.Component {
               }
             </div>
 
-            <Button type="submit"> <FontAwesomeIcon icon={faCheckCircle} /> Create Bubble</Button>
+            <Button onClick={this.handleBubbleCreation}> <FontAwesomeIcon icon={faCheckCircle} /> Create Bubble</Button>
           </form>
         </div>
       </div>

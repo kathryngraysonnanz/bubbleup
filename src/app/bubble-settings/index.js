@@ -130,7 +130,7 @@ export default class BubbleSettings extends React.Component {
         }
         {Object.entries(members).map(member =>
           <tr key={member[1].name}>
-            <td>{member[1].name}</td>
+            <td>{member[1].name} { this.state.user.uid === member[0] && <span> (You)</span> }</td>
             <td>
               { member[1].admin &&
                 <><FontAwesomeIcon icon={faUserCog} /> Admin</>
@@ -141,9 +141,18 @@ export default class BubbleSettings extends React.Component {
                 </button>
               }
             </td>
-            <td><button onClick={(e) => showModal(member[0])}>
-              <FontAwesomeIcon icon={faSignOutAlt} /> <span>Remove from bubble</span>
-            </button></td>
+
+            <td>
+              { this.state.user.uid !== member[0] &&
+                <button onClick={(e) => showModal(member[0])}>
+                  <FontAwesomeIcon icon={faSignOutAlt} /> <span>Remove from bubble</span>
+                </button>
+              }
+              { this.state.user.uid === member[0] &&
+                <>Edit your membership in <Link to="/user-settings">User Settings</Link></>
+              }
+            </td>
+
           </tr>
         )}
       </>
@@ -180,6 +189,7 @@ export default class BubbleSettings extends React.Component {
 
     return (
       <div className="overlayBackground">
+        {console.log(this.state.user.uid)}
         <div className="contentWrapper bubbleSettings">
           <div className="title">
             <h1><b>Bubble</b> Settings</h1>
