@@ -29,6 +29,7 @@
   border-radius: 2px;
   margin-right: 8px;
   width: 40px;
+  min-width: 40px;
 }
 
 .days p {
