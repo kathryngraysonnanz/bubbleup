@@ -30,14 +30,14 @@ export default class Home extends React.Component {
       user: auth().currentUser,
       lastCheckIn: 'never',
       admin: false,
-      bubble: false
+      bubble: false,
+      pendingBubble: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
 
-    this.declineInvite = this.declineInvite.bind(this);
     this.acceptInvite = this.acceptInvite.bind(this);
   }
 
@@ -58,11 +58,13 @@ export default class Home extends React.Component {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
             let bubble = (snapshot.val() && snapshot.val().bubble) || false;
+            let pendingBubble = (snapshot.val() && snapshot.val().pendingBubble || false)
             var admin = (snapshot.val() && snapshot.val().admin) || false;
             var lastCheckIn = (snapshot.val() && snapshot.val().lastCheckIn) || 'never';
             this.setState ({
               name: username,
               bubble: bubble,
+              pendingBubble: pendingBubble,
               admin: admin,
               lastCheckIn: lastCheckIn
             })
@@ -138,27 +140,14 @@ export default class Home extends React.Component {
     this.setState({ inviteVisible: !this.state.inviteVisible });
   }
 
-  declineInvite() {
-    this.setState({
-      inviteBubble: false,
-      bubble: false
-    })
-  }
-
   acceptInvite(bubbleID) {
-    firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
-      bubble: bubbleID,
-      admin: false
-    });
-
-    firebase.database().ref('bubbles/' + bubbleID + '/members/' + firebase.auth().currentUser.uid).update({
+    firebase.database().ref('bubbles/' + bubbleID + '/pendingMembers/' + firebase.auth().currentUser.uid).update({
       name: this.state.name
     });
 
-    this.setState({
-      bubble: bubbleID,
-      inviteBubble: false
-    })
+    firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+      pendingBubble: bubbleID
+    });
   }
 
   render() {
@@ -281,6 +270,7 @@ export default class Home extends React.Component {
                 userID={firebase.auth().currentUser.uid}
                 username={this.state.name}
                 bubbleID={this.state.bubble}
+                pendingBubble={this.state.pendingBubble}
                 admin={this.state.admin}
               />
             }
@@ -290,7 +280,6 @@ export default class Home extends React.Component {
         { !this.state.loading && this.state.inviteURL && this.state.authenticated &&
           <Invite
             inviteURL={this.state.inviteURL}
-            declineInvite={this.declineInvite}
             acceptInvite={this.acceptInvite}/>
         }
         { this.state.loading &&

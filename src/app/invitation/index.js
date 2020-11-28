@@ -27,10 +27,16 @@ export default class Invite extends React.Component {
           uuid = false
         }
 
-        this.setState ({
-          bubbleID: uuid,
-          name: referencedBubble.[uuid].name
-        })
+        try {
+          this.setState ({
+            bubbleID: uuid,
+            name: referencedBubble.[uuid].name
+          })
+        } catch {
+          this.setState ({
+            name: false
+          })
+        }
     });
   }
 
@@ -48,9 +54,10 @@ export default class Invite extends React.Component {
                 <br/>
                 <p><b>NOTE:</b> You cannot be in multiple bubbles at once. Clicking
                 "Join" will be remove you from any current bubble you're a member
-                of, and add you to this new bubble instead.</p>
+                of and add you to this new bubble instead, as soon as an admin approves
+                your application.</p>
                 <div>
-                  <a href="/" onClick={()=>this.props.declineInvite()}>Decline invitation</a>
+                  <a href="/">Decline invitation</a>
                   <a href='/' onClick={()=>this.props.acceptInvite(this.state.bubbleID)}><Button>Join</Button></a>
                 </div>
               </>

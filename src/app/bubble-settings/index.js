@@ -6,7 +6,13 @@ import { db } from "../services/firebase"
 
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUserCog, faCheckCircle, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import {
+  faSignOutAlt,
+  faUserCog,
+  faCheckCircle,
+  faUserPlus,
+  faUserCheck,
+  faUserTimes } from '@fortawesome/free-solid-svg-icons'
 import './bubble-settings.css';
 
 export default class BubbleSettings extends React.Component {
@@ -19,16 +25,21 @@ export default class BubbleSettings extends React.Component {
       writeError: null,
       invites: '',
       members: this.props.location.state.members,
+      pendingMembers: this.props.location.state.pendingMembers,
       bubbleName: this.props.location.state.name,
+      bubbleId: this.props.location.state.bubbleId,
       link: this.props.location.state.link,
       authUpdate: false,
       memberToRemove: false
     };
 
     this.renderMemberEditRows = this.renderMemberEditRows.bind(this)
+    this.renderPendingMemberEditRows = this.renderPendingMemberEditRows.bind(this)
     this.showModal = this.showModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.promote = this.promote.bind(this);
+    this.approve = this.approve.bind(this);
+    this.decline = this.decline.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generateNewURL = this.generateNewURL.bind(this);
   }
@@ -46,7 +57,7 @@ export default class BubbleSettings extends React.Component {
     this.setState({ writeError: null });
 
     try {
-      await db.ref('bubbles/' + this.props.location.state.bubbleId).update({
+      await db.ref('bubbles/' + this.state.bubbleId).update({
         name: this.state.bubbleName
       });
     } catch (error) {
@@ -57,20 +68,57 @@ export default class BubbleSettings extends React.Component {
   }
 
   updateMembers(){
-    db.ref("/bubbles/" + this.props.location.state.bubbleId).on("value", snapshot => {
-      var members = (snapshot.val() && snapshot.val().members) || null;
-      this.setState ({
-        members: members
-      });
+
+    db.ref("/bubbles/" + this.state.bubbleId).on("value", snapshot => {
+      let members = (snapshot.val() && snapshot.val().members) || null;
+      let pendingMembers = (snapshot.val() && snapshot.val().pendingMembers) || null;
+
+        this.setState ({
+          members: members,
+          pendingMembers: pendingMembers
+        });
+
     });
   }
 
-  promote(memberId) {
+  approve(memberId, memberName){
+    try {
+      db.ref('users/' + memberId).update({
+        pendingBubble: false,
+        bubble: this.state.bubbleId
+      });
+
+      db.ref('bubbles/' + this.state.bubbleId + '/members/' + memberId).update({
+        name: memberName
+      });
+
+      db.ref('bubbles/' + this.state.bubbleId + '/pendingMembers/' + memberId).remove();
+
+      this.updateMembers();
+    } catch {
+      console.log('error approving')
+    }
+  }
+
+  decline(memberId) {
+    try {
+      db.ref('users/' + memberId).update({
+        pendingBubble: false
+      });
+
+      db.ref('bubbles/' + this.state.bubbleId + '/pendingMembers/' + memberId).remove();
+      this.updateMembers();
+    } catch {
+      console.log("error declining")
+    }
+  }
+
+  promote(memberId, bubbleId) {
     try {
       db.ref('users/' + memberId).update({
         admin: true
       });
-      db.ref('bubbles/' + this.props.location.state.bubbleId + '/members/' + memberId).update({
+      db.ref('bubbles/' + bubbleId + '/members/' + memberId).update({
         admin: true
       });
       this.updateMembers();
@@ -79,12 +127,12 @@ export default class BubbleSettings extends React.Component {
     }
   }
 
-  remove(memberId) {
+  remove(memberId, bubbleId) {
     try {
       db.ref('users/' + memberId).update({
         bubble: false
       });
-      db.ref('bubbles/' + this.props.location.state.bubbleId + '/members/' + memberId).remove();
+      db.ref('bubbles/' + bubbleId + '/members/' + memberId).remove();
       this.updateMembers();
     } catch (error) {
       console.log('error')
@@ -105,7 +153,7 @@ export default class BubbleSettings extends React.Component {
     });
   }
 
-  modal(member){
+  modal(member, bubbleId){
     return (
       <div className="modalWrapper">
         <div className="modal">
@@ -115,18 +163,18 @@ export default class BubbleSettings extends React.Component {
           previously shared data from the bubble.</p>
           <div>
             <Button onClick={()=>this.showModal()}>Nevermind</Button>
-            <Button onClick={()=>this.remove(member)}>Yes, remove</Button>
+            <Button onClick={()=>this.remove(member, bubbleId)}>Yes, remove</Button>
           </div>
         </div>
       </div>
     )
   }
 
-  renderMemberEditRows(members, promote, showModal){
+  renderMemberEditRows(members, promote, showModal, bubbleId){
     return (
       <>
         { this.state.showModal &&
-          this.modal(this.state.memberToRemove)
+          this.modal(this.state.memberToRemove, bubbleId)
         }
         {Object.entries(members).map(member =>
           <tr key={member[1].name}>
@@ -136,7 +184,7 @@ export default class BubbleSettings extends React.Component {
                 <><FontAwesomeIcon icon={faUserCog} /> Admin</>
               }
               { !member[1].admin &&
-                <button onClick={(e) => promote(member[0])}>
+                <button onClick={(e) => promote(member[0], bubbleId)}>
                   <FontAwesomeIcon icon={faUserPlus} /> <span>Promote to admin</span>
                 </button>
               }
@@ -144,7 +192,7 @@ export default class BubbleSettings extends React.Component {
 
             <td>
               { this.state.user.uid !== member[0] &&
-                <button onClick={(e) => showModal(member[0])}>
+                <button onClick={(e) => showModal(member[0], bubbleId)}>
                   <FontAwesomeIcon icon={faSignOutAlt} /> <span>Remove from bubble</span>
                 </button>
               }
@@ -153,6 +201,29 @@ export default class BubbleSettings extends React.Component {
               }
             </td>
 
+          </tr>
+        )}
+      </>
+    )
+  }
+
+  renderPendingMemberEditRows(pendingMembers, approve, decline, bubbleId){
+    return (
+      <>
+        {Object.entries(pendingMembers).map(member =>
+          <tr key={member[1].name}>
+            <td>{member[1].name}</td>
+            <td>
+              <button onClick={(e) => approve(member[0], member[1].name)}>
+                <FontAwesomeIcon icon={faUserCheck} /> <span>Approve</span>
+              </button>
+            </td>
+
+            <td>
+              <button onClick={(e) => decline(member[0])}>
+                <FontAwesomeIcon icon={faUserTimes} /> <span>Decline</span>
+              </button>
+            </td>
           </tr>
         )}
       </>
@@ -184,7 +255,7 @@ export default class BubbleSettings extends React.Component {
     if (window.location.hostname === "localhost") {
       inviteURL = "http://localhost:3000/"+this.state.link
     } else {
-      inviteURL = window.location.hostname+this.state.link
+      inviteURL = window.location.hostname+"/"+this.state.link
     }
 
     return (
@@ -204,12 +275,32 @@ export default class BubbleSettings extends React.Component {
             Once a member is promoted to admin, they cannot be demoted. There is no
             limit to the number of admin users in a bubble.</p>
 
-            <table>
-              <tbody>
-              {this.renderMemberEditRows(this.state.members, this.promote, this.showModal)}
-              </tbody>
-            </table>
+
+              <table>
+                <tbody>
+                {this.state.members && this.renderMemberEditRows(this.state.members, this.promote, this.showModal, this.state.bubbleId)}
+                </tbody>
+              </table>
+
           </div>
+
+          <div className="editBubbleMembers">
+            <h3>Pending Bubble Members</h3>
+            <p><b>These are people who have followed your invitation link and
+            asked to join your bubble.</b></p>
+            <p>Only admins can approve new bubble members. If you find your bubble
+            getting a large number of unknown applicants, generate a new bubble
+            invitation link below.</p>
+
+
+              <table>
+                <tbody>
+                {this.state.pendingMembers && this.renderPendingMemberEditRows(this.state.pendingMembers, this.approve, this.decline, this.state.bubbleId)}
+                </tbody>
+              </table>
+
+          </div>
+
           <form onSubmit={this.handleSubmit}>
             <h3>Bubble Name</h3>
             <p>Bubble names are optional and just for fun. Currently, your bubble's name
@@ -222,9 +313,9 @@ export default class BubbleSettings extends React.Component {
             <p>Your bubble should be a small, tight-knit group of people that all
             interact regularly. All members of the bubble will be able
             to see each others' check-in information.</p>
-            <p>This is your bubble's secret link! <b>Anyone with this link can
+            <p>This is your bubble's secret link! <b>Anyone with this link can apply to
             join your bubble</b>, so don't share it on any public forums or social
-            media sites! Give it directly to the people you want to invite.</p>
+            media sites. Give it directly to the people you want to invite.</p>
             <div className="inviteURLWrapper">
               <textarea
                 ref={(textarea) => this.textArea = textarea}
