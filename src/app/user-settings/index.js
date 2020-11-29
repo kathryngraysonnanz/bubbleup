@@ -2,13 +2,15 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 import firebase from 'firebase/app'
-import { auth } from "../services/firebase";
+import { auth } from "../services/firebase"
 import { db } from "../services/firebase"
+import { signin } from '../helpers/auth';
 
 import Button from '../components/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import './user-settings.css';
+
 
 export default class UserSettings extends React.Component {
 
@@ -31,7 +33,7 @@ export default class UserSettings extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.reAuth = this.reAuth.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
     this.updateEmail = this.updateEmail.bind(this);
     this.deleteAccount = this.deleteAccount.bind(this);
   }
@@ -43,7 +45,9 @@ export default class UserSettings extends React.Component {
           var username = (snapshot.val() && snapshot.val().username) || false;
           let bubble = (snapshot.val() && snapshot.val().bubble) || false;
           var reminders = (snapshot.val() && snapshot.val().reminders) || false;
+          var admin = (snapshot.val() && snapshot.val().admin) || false;
           this.setState ({
+            admin: admin,
             name: username,
             bubble: bubble,
             reminders: reminders
@@ -54,10 +58,6 @@ export default class UserSettings extends React.Component {
       }
     }
 
-  reAuth(event) {
-    event.preventDefault();
-    this.setState({ reAuth: true })
-  }
 
   updateEmail(newEmail){
     firebase.auth()
@@ -73,6 +73,17 @@ export default class UserSettings extends React.Component {
     .then(function(userCredential) {
         userCredential.user.delete()
     })
+  }
+
+  async handleSignIn(event) {
+    event.preventDefault();
+    this.setState({ error: '' });
+    try {
+      await signin(this.state.email, this.state.password);
+      this.setState({ reAuth: true })
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
   }
 
   async handleSubmit(event) {
@@ -167,7 +178,7 @@ export default class UserSettings extends React.Component {
           { !this.state.reAuth &&
             <div className="reAuth">
               <p>Please confirm your login before updating your user settings.</p>
-              <form onSubmit={this.reAuth}>
+              <form onSubmit={this.handleSignIn}>
                 <div>
                   <input
                     placeholder="Email"
@@ -186,6 +197,8 @@ export default class UserSettings extends React.Component {
                     type="password"
                   />
                 </div>
+                {this.state.error &&
+                <p class="authTextError">{this.state.error}</p> }
                 <div>
                   <Button type="submit">Continue</Button>
                 </div>
@@ -230,10 +243,17 @@ export default class UserSettings extends React.Component {
             member. You will no longer appear as a member, and any data that was
             previously shared with the bubble will be removed. <b>Once you leave a
             bubble, you must be re-invited in order to re-join.</b></p>
+            <br/>
+            { this.state.admin &&
+              <p><b>You are an admin of this bubble.</b> Before you leave, make
+              sure you've designated an new admin in the <Link to='/bubble-settings'>Bubble Settings</Link>.</p>
+            }
             <p className="deleteConfirm">Type "LEAVE" to confirm you want to
             leave your current bubble:</p>
             <input onChange={this.handleChange} type="text"
             id="leaveBubble" name="leaveBubble"/>
+
+
 
             <h3>Delete My Account</h3>
             <p>This will delete your account and erase all your data. You will
