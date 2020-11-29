@@ -2,6 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 import { db } from "../services/firebase"
+import firebase from 'firebase/app'
 
 import Button from '../components/button'
 import Accordion from '../components/accordion'
@@ -26,10 +27,12 @@ export default class Bubble extends React.Component {
     try {
       db.ref("/bubbles/" + this.props.bubbleID).on("value", snapshot => {
         var members = (snapshot.val() && snapshot.val().members) || null;
+        var pendingMembers = (snapshot.val() && snapshot.val().pendingMembers) || null;
         var name = (snapshot.val() && snapshot.val().name) || null;
         var link = (snapshot.val() && snapshot.val().link) || null;
         this.setState ({
           members: members,
+          pendingMembers: pendingMembers,
           name: name,
           link: link
         });
@@ -37,6 +40,12 @@ export default class Bubble extends React.Component {
     } catch (error) {
       this.setState({ error: error.message });
     }
+  }
+
+  rescindApplication() {
+    db.ref('bubbles/' + this.props.bubbleID + '/pendingMembers/' + firebase.auth().currentUser.uid).remove();
+
+    db.ref('users/' + firebase.auth().currentUser.uid + '/pendingBubble').remove()
   }
 
   render() {
@@ -213,6 +222,7 @@ export default class Bubble extends React.Component {
                   state: {
                     link: this.state.link,
                     members: this.state.members,
+                    pendingMembers: this.state.pendingMembers,
                     name: this.state.name,
                     bubbleId: this.props.bubbleID
                   }
@@ -227,7 +237,17 @@ export default class Bubble extends React.Component {
           </div>
           </>
         }
-        { !this.props.bubbleID &&
+        { !this.props.bubbleID && this.props.pendingBubble &&
+          <div className="noBubble">
+            <h3>Your bubble membership is pending!</h3>
+            <p>For the privacy & safety of all bubble members, new members
+            must be approved by an admin before they can join the bubble. Check
+            back soon!
+           </p>
+           <Button onClick={()=>this.rescindApplication()}>Rescind membership application</Button>
+          </div>
+        }
+        { !this.props.bubbleID && !this.props.pendingBubble &&
           <div className="noBubble">
             <h3>You're not part of a bubble yet!</h3>
             <p>For privacy purposes, bubbles are invitation-only and
@@ -240,7 +260,6 @@ export default class Bubble extends React.Component {
                  username: this.props.username
                }
              }}>
-             {console.log(this.props.username)}
               <Button><FontAwesomeIcon icon={faUsers} /> Start a new bubble</Button>
             </Link>
           </div>
