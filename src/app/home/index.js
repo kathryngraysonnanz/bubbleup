@@ -105,11 +105,15 @@ export default class Home extends React.Component {
     } catch (error) {
       this.setState({ error: error.message });
     }
+
+    try {
     this.writeUserData(
       firebase.auth().currentUser.uid,
       firebase.auth().currentUser.email,
       this.state.username
-    )
+    ) } catch (error) {
+      this.setState({ error: error.message });
+    }
   }
 
   async handleSignIn(event) {
