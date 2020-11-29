@@ -204,7 +204,7 @@ export default class Home extends React.Component {
               <h3>
                 Login to your account
               </h3>
-              <p>No account? <button onClick={()=>this.setState({ login: false })}>Create one!</button></p>
+              {/*<p>No account? <button onClick={()=>this.setState({ login: false })}>Create one!</button></p>*/}
               <form onSubmit={this.handleSignIn} className="signin">
                 <div>
                   <input
@@ -225,8 +225,8 @@ export default class Home extends React.Component {
                   />
                 </div>
                 <div className="forgotPW">
-                  <p>Forgot password?</p>
-                  <button onClick={()=>this.sendResetPWEmail(this.state.email)}>Send reset email</button>
+                  <p>Forgot password?&nbsp;</p>
+                  <a onClick={()=>this.sendResetPWEmail(this.state.email)}>Send reset email</a>
                 </div>
                 <>
                   {this.state.error ? (

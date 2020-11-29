@@ -120,6 +120,10 @@ export default class Checkin extends React.Component {
           quarantining: [this.state.quarantining, this.state.checkInDate],
           quarantineEnd: [this.state.quarantineEnd]
         });
+      } else {
+        db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
+          quarantining: [this.state.quarantining, this.state.checkInDate]
+        });
       }
 
       db.ref('bubbles/' + this.props.location.state.bubble + '/members/' + firebase.auth().currentUser.uid + '/checkin').update({
@@ -339,7 +343,7 @@ export default class Checkin extends React.Component {
                   <input type="radio" id="yes" name="quarantineEnd" value="yes"/>
                   <label for="yes">Yes, my quarantine will end on
                     <label for="endDate"></label>
-                    <input type="date" id="endDate" name="Quarantine end date"
+                    <input type="date" id="endDate" name="quarantineEnd"
                     onChange={this.handleChange}/>
                   </label>
                 </div>

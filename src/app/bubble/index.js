@@ -63,6 +63,22 @@ export default class Bubble extends React.Component {
                           <div>{member[1].checkin.status[0]}</div>
                         </div>
                       }
+                      {member[1].checkin.quarantining &&
+                        <div className="status">
+                          {member[1].checkin.quarantining[0] &&
+                            <>
+                            <p><b>Currently quarantining: </b>
+                            {member[1].checkin.quarantineEnd[0] &&
+                              <i>ends on {member[1].checkin.quarantineEnd[0]}</i>
+                            }
+                            {!member[1].checkin.quarantineEnd[0] &&
+                              <i>unknown end date.</i>
+                            }
+                            </p>
+                            </>
+                        }
+                        </div>
+                      }
                       <div className="questionWrapper">
                         {member[1].checkin.socialized &&
                           <div className="question">
