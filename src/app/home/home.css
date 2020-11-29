@@ -77,12 +77,6 @@ h2, p {
   color: white;
 }
 
-.authPage .authTextError{
-  font-style: italic;
-  text-align: left;
-  color: white;
-}
-
 .authPage {
   position: absolute;
   top: 0;
@@ -161,22 +155,31 @@ h2, p {
   margin: 0;
 }
 
+.authPage .authTextError {
+  color: white;
+  text-align: left;
+  font-style: italic;
+}
+
 .forgotPW {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
-.forgotPW p, .forgotPW a {
+.forgotPW p, a {
   color: white;
   margin: 0;
   padding: 0;
-  font-size: 0.85rem;
 }
 
-.forgotPW a {
-  cursor: pointer;
+.forgotPW button {
+  background-color: transparent;
+  border: none;
+  color: white;
   text-decoration: underline;
+  margin: 0 !important;
+  font-family: inherit;
 }
 
 @media (max-width: 500px){

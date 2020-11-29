@@ -58,7 +58,7 @@ export default class Home extends React.Component {
           db.ref("/users/" + firebase.auth().currentUser.uid).on("value", snapshot => {
             var username = (snapshot.val() && snapshot.val().username) || 'User';
             let bubble = (snapshot.val() && snapshot.val().bubble) || false;
-            let pendingBubble = (snapshot.val() && snapshot.val().pendingBubble || false)
+            let pendingBubble = (snapshot.val() && snapshot.val().pendingBubble) || false;
             var admin = (snapshot.val() && snapshot.val().admin) || false;
             var lastCheckIn = (snapshot.val() && snapshot.val().lastCheckIn) || 'never';
             this.setState ({
@@ -214,8 +214,8 @@ export default class Home extends React.Component {
                   />
                 </div>
                 <div className="forgotPW">
-                  <p>Forgot password?&nbsp;</p>
-                  <a onClick={()=>this.sendResetPWEmail(this.state.email)}>Send reset email</a>
+                  <p>Forgot password? Enter only email and </p>
+                  <button type="button" onClick={(e)=>this.sendResetPWEmail(this.state.email)}>send reset email</button>
                 </div>
                 <>
                   {this.state.error ? (
