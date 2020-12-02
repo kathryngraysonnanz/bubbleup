@@ -130,7 +130,9 @@ export default class BubbleSettings extends React.Component {
   remove(memberId, bubbleId) {
     try {
       db.ref('users/' + memberId).update({
-        bubble: false
+        bubble: false,
+        admin: false,
+        removed: true
       });
       db.ref('bubbles/' + bubbleId + '/members/' + memberId).remove();
       this.updateMembers();

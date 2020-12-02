@@ -29,6 +29,7 @@ export default class Home extends React.Component {
 
       user: auth().currentUser,
       lastCheckIn: 'never',
+      removed: false,
       admin: false,
       bubble: false,
       pendingBubble: false
@@ -60,12 +61,14 @@ export default class Home extends React.Component {
             let bubble = (snapshot.val() && snapshot.val().bubble) || false;
             let pendingBubble = (snapshot.val() && snapshot.val().pendingBubble) || false;
             var admin = (snapshot.val() && snapshot.val().admin) || false;
+            var removed = (snapshot.val() && snapshot.val().removed) || false;
             var lastCheckIn = (snapshot.val() && snapshot.val().lastCheckIn) || 'never';
             this.setState ({
               name: username,
               bubble: bubble,
               pendingBubble: pendingBubble,
               admin: admin,
+              removed: removed,
               lastCheckIn: lastCheckIn
             })
           });
@@ -154,6 +157,27 @@ export default class Home extends React.Component {
     });
   }
 
+  readRemovalNotice() {
+    firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+      removed: false
+    });
+  }
+
+  modal(){
+    return (
+      <div className="modalWrapper">
+        <div className="modal">
+          <h3>You are no longer a member of a bubble.</h3>
+          <p>The admin of your previous bubble removed you. If you believe this
+          was a mistake, please reach out to them to be re-invited.</p>
+          <div className="singleButton">
+            <Button onClick={()=>this.readRemovalNotice()}>Okay</Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   render() {
 
     return (
@@ -237,6 +261,7 @@ export default class Home extends React.Component {
         }
         { !this.state.loading && this.state.authenticated &&
         <div className="background">
+          { this.state.removed && this.modal() }
           <div className="contentWrapper">
             <div className="welcome">
               <h1>Welcome back, <b>{this.state.name}</b>&nbsp;
