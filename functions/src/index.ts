@@ -9,7 +9,7 @@ sgMail.setApiKey(API_KEY);
 
 admin.initializeApp();
 
-export const reminder = functions.pubsub.schedule('every saturday 21:00').onRun(async context => {
+export const reminder = functions.pubsub.schedule('every saturday 21:00').timeZone('America/New_York').onRun(async context => {
 
   let reminderList = false
   let emails:string[] = []
