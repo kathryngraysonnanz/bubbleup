@@ -9,23 +9,24 @@ sgMail.setApiKey(API_KEY);
 
 admin.initializeApp();
 
-export const reminder = functions.pubsub.schedule('every saturday 21:00').timeZone('America/New_York').onRun(async context => {
-
-  let reminderList = false
-  let emails:string[] = []
+export const reminder = functions.pubsub.schedule('every friday 9:10').timeZone('America/New_York').onRun(async context => {
 
   var ref = await admin.database().ref("users");
   ref.orderByChild('reminders').equalTo(true).on("value", function(snapshot) {
+
+      let reminderList = false
+      let emails:string[] = []
+
       reminderList = snapshot.val()
       Object.entries(reminderList).map(member => emails.push(member[1].email))
+
+      const msg = {
+        to: emails,
+        from: 'hello@bubbleupapp.com',
+        templateId: TEMPLATE_ID
+      };
+
+      return sgMail.sendMultiple(msg);
   });
-
-    const msg = {
-      to: emails,
-      from: 'hello@bubbleupapp.com',
-      templateId: TEMPLATE_ID
-    };
-
-    return sgMail.sendMultiple(msg);
 
 });
