@@ -24,11 +24,6 @@ export default class BubbleSettings extends React.Component {
       readError: null,
       writeError: null,
       invites: '',
-      members: this.props.location.state.members,
-      pendingMembers: this.props.location.state.pendingMembers,
-      bubbleName: this.props.location.state.name,
-      bubbleId: this.props.location.state.bubbleId,
-      link: this.props.location.state.link,
       authUpdate: false,
       memberToRemove: false
     };
@@ -51,6 +46,18 @@ export default class BubbleSettings extends React.Component {
     e.target.focus();
     this.setState({ copySuccess: true });
   };
+
+  componentDidMount() {
+    if (this.props.location.state !== undefined) {
+      this.setState({
+        members: this.props.location.state.members,
+        pendingMembers: this.props.location.state.pendingMembers,
+        bubbleName: this.props.location.state.name,
+        bubbleId: this.props.location.state.bubbleId,
+        link: this.props.location.state.link
+      })
+    }
+  }
 
   async handleSubmit(event) {
     event.preventDefault();
@@ -252,6 +259,10 @@ export default class BubbleSettings extends React.Component {
 
   render() {
 
+    if (this.props.location.state === undefined) {
+      this.props.history.push('/');
+    }
+
     let inviteURL
 
     if (window.location.hostname === "localhost") {
@@ -262,7 +273,6 @@ export default class BubbleSettings extends React.Component {
 
     return (
       <div className="overlayBackground">
-        {console.log(this.state.user.uid)}
         <div className="contentWrapper bubbleSettings">
           <div className="title">
             <h1><b>Bubble</b> Settings</h1>
@@ -306,7 +316,7 @@ export default class BubbleSettings extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <h3>Bubble Name</h3>
             <p>Bubble names are optional and just for fun. Currently, your bubble's name
-            is <b>{this.props.location.state.name}</b>. </p>
+            is <b>{this.state.bubbleName}</b>. </p>
 
             <input onChange={this.handleChange} type="text" maxLength="60"
             id="bubbleName" name="bubbleName"/>

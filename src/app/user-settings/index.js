@@ -162,8 +162,17 @@ export default class UserSettings extends React.Component {
       [event.target.name]: event.target.value
     });
   }
+  
+  routeToHome() {
+    this.props.history.push('/');
+  }
 
   render() {
+
+    if (this.props.location.state === undefined) {
+      this.routeToHome()
+    }
+
     return (
       <div className="overlayBackground">
         <div className="contentWrapper userSettings">

@@ -221,7 +221,7 @@ export default class Home extends React.Component {
               <h3>
                 Login to your account
               </h3>
-              {/*<p>No account? <button onClick={()=>this.setState({ login: false })}>Create one!</button></p>*/}
+              <p>No account? <button onClick={()=>this.setState({ login: false })}>Create one!</button></p>
               <form onSubmit={this.handleSignIn} className="signin">
                 <div>
                   <input
@@ -275,7 +275,15 @@ export default class Home extends React.Component {
                 </Link>
                 </h1>
               <div>
-                <p>Your last check-in was for {this.state.lastCheckIn} •
+                <p>
+                {this.state.lastCheckIn === "never" &&
+                  <>Your last check-in was {this.state.lastCheckIn} </>
+                }
+
+                {this.state.lastCheckIn !== "never" &&
+                  <>Your last check-in was for {this.state.lastCheckIn} </>
+                }
+                •
                  <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
                 </p>
                 { this.state.bubble &&

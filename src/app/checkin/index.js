@@ -180,9 +180,16 @@ export default class Checkin extends React.Component {
     }
   }
 
-  render() {
+  routeToHome() {
+    this.props.history.push('/');
+  }
 
+  render() {
     let today = new Date().toISOString().substring(0,10);
+
+    if (this.props.location.state === undefined) {
+      this.routeToHome()
+    }
 
     return (
       <div className="overlayBackground">
@@ -193,6 +200,7 @@ export default class Checkin extends React.Component {
               <h1>X</h1>
             </Link>
           </div>
+
           <form onSubmit={this.handleSubmit}>
             <div className="dateWrapper">
               <label for="checkInDate">This check-in is for:</label>

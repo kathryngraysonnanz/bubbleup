@@ -85,6 +85,10 @@ export default class BubbleSetup extends React.Component {
 
     let inviteURL = window.location.href+this.state.linkUUID
 
+    if (this.props.location.state === undefined) {
+      this.props.history.push('/');
+    }
+
     return (
       <div className="overlayBackground">
         <div className="contentWrapper bubbleSettings">

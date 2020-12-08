@@ -48,6 +48,8 @@ export default class Bubble extends React.Component {
     db.ref('users/' + firebase.auth().currentUser.uid + '/pendingBubble').remove()
   }
 
+
+
   render() {
 
     function mapOverMembers(members, userID){
@@ -55,9 +57,6 @@ export default class Bubble extends React.Component {
         <>
           {Object.entries(members).map(member =>
             <div key={member[1].name}>
-              {/* TODO: Add quarantine prop back to accordion and figure out
-                how to stop it from making that "cannot read property of
-                undefined" error */}
               { member[1].checkin &&
                 <Accordion
                   title={member[1].name}
