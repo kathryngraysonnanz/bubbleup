@@ -275,17 +275,22 @@ export default class Home extends React.Component {
                 </Link>
                 </h1>
               <div>
-                <p>
-                {this.state.lastCheckIn === "never" &&
-                  <>Your last check-in was {this.state.lastCheckIn} </>
-                }
+                <div className="headerOptionWrapper">
 
-                {this.state.lastCheckIn !== "never" &&
-                  <>Your last check-in was for {this.state.lastCheckIn} </>
-                }
-                •
                  <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
-                </p>
+                 <p>•</p>
+                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7j8TDgwOFt9PR60zWBKDQw1QsQUMlFxYLHfDnQHdG1SLD1g/viewform?usp=sf_link" target="_blank">
+                    Report a bug</a>
+                          <p>•</p>
+                    {this.state.lastCheckIn === "never" &&
+                      <p>Your last check-in was {this.state.lastCheckIn} </p>
+                    }
+
+                    {this.state.lastCheckIn !== "never" &&
+                      <p>Your last check-in was for {this.state.lastCheckIn} </p>
+                    }
+
+                </div>
                 { this.state.bubble &&
                   <Link to={{
                     pathname: '/checkin',

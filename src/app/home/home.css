@@ -61,12 +61,25 @@ h2, p {
   display: flex;
   align-items: center;
   color: white;
-  margin-bottom: 30px;
-  margin-top: 10px;
+  margin: 10px 0 20px 0;
 }
 
-.welcome div p {
-  margin-right: 10px;
+.headerOptionWrapper {
+  margin: 0 !important;
+}
+
+.welcome div a, .welcome div p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.85rem;
+  color: white;
+  margin: 0 4px;
+}
+
+.welcome div a {
+  text-decoration: underline;
+}
+
+.welcome div a:visited {
   color: white;
 }
 
@@ -188,7 +201,8 @@ h2, p {
     margin-top: 10px;
   }
 
-  .welcome div p {
-    margin-bottom: 10px;
+  .headerOptionWrapper {
+    margin-bottom: 10px !important;
   }
+
 }
