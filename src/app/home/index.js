@@ -279,7 +279,7 @@ export default class Home extends React.Component {
 
                  <button className="signOut" onClick={() => this.signOutUser()}>Sign out</button>
                  <p>•</p>
-                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7j8TDgwOFt9PR60zWBKDQw1QsQUMlFxYLHfDnQHdG1SLD1g/viewform?usp=sf_link" target="_blank">
+                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7j8TDgwOFt9PR60zWBKDQw1QsQUMlFxYLHfDnQHdG1SLD1g/viewform?usp=sf_link">
                     Report a bug</a>
                           <p>•</p>
                     {this.state.lastCheckIn === "never" &&
